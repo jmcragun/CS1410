@@ -26,7 +26,7 @@ public class MazeControl extends JFrame implements ActionListener, Runnable
         setTitle("Monkey Maze");
 
         // Create the maze
-        maze = new Maze(50, 50);
+        maze = new Maze(100, 100);
 
         // Create a panel with the buttons
         JPanel buttons = new JPanel();

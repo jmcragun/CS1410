@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
+	<section name=" org.eclipse.ui.texteditor.FindReplaceDialog">
+		<item value="false" key="isRegEx"/>
+		<item value="false" key="casesensitive"/>
+		<item value="false" key="wholeword"/>
+		<list key="findhistory">
+			<item value="if (timer &gt; 5800 &amp;&amp; timer &lt; 6250)"/>
+			<item value="int xFinal = xOrigin + (int) (R * ((1 - k) * Math.cos((double) (t * Math.PI / 1000))"/>
+		</list>
+		<list key="replacehistory">
+		</list>
+	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="n" key="selection"/>
+		<item value="100" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="50"/>
+			<item value="700"/>
+			<item value="1300"/>
 			<item value="result"/>
 			<item value="40"/>
 		</list>
 		<list key="replacehistory">
+			<item value="100"/>
+			<item value="650"/>
+			<item value="1200"/>
 			<item value="n"/>
 		</list>
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog_dialogBounds">
 		<item value="315" key="DIALOG_WIDTH"/>
-		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|5|0|Segoe UI" key="DIALOG_FONT_NAME"/>
+		<item value="1|Segoe UI|9.0|0|WINDOWS|1|-15|0|0|0|400|0|0|0|1|0|0|0|0|Segoe UI" key="DIALOG_FONT_NAME"/>
 		<item value="454" key="DIALOG_HEIGHT"/>
 		<item value="801" key="DIALOG_X_ORIGIN"/>
 		<item value="222" key="DIALOG_Y_ORIGIN"/>
