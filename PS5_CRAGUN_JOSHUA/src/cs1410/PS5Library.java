@@ -10,7 +10,7 @@ import java.util.Scanner;
 /**
  * A library of methods for implementing the random text generation algorithm described in PS5, Fall 2017.
  * 
- * @author ????? and Joe Zachary
+ * @author Joshua Cragun and Joe Zachary
  */
 public class PS5Library
 {
@@ -26,7 +26,7 @@ public class PS5Library
         try (InputStream book = PS5Library.class.getResourceAsStream("/books/PrideAndPrejudice.txt");
                 Scanner input = new Scanner(book))
         {
-            System.out.println(generateText(input, 6, 100));
+            System.out.println(generateText(input, 6, 200));
         }
     }
 
@@ -90,5 +90,117 @@ public class PS5Library
 
         // Return the string we've accumulated.
         return result.toString();
+    }
+    /**
+     * Takes a Scanner as its parameter and returns a String. 
+     * The returned string consists of all the characters in the scanner in their original order, including the newlines.
+     * The last line (assuming there are any lines) should always end with a newline, even if it didn't in the original text.
+     * @param scn
+     * @return
+     */
+    public static String scannerToString (Scanner scn)
+    {
+        StringBuilder strBldr = new StringBuilder();
+        while (scn.hasNext())
+        {
+            strBldr.append(scn.nextLine() + '\n');
+        }
+        return strBldr.toString();
+    }
+    /**
+     * Takes a String text, an int length, and a random number generator as its parameters. 
+     * It should use the random number generator to return a randomly chosen substring of text that has the specified length. 
+     * If length is either negative or greater than the length of text, the method should throw an IllegalArgumentException.  
+     * @param text
+     * @param length
+     * @param rand
+     * @return
+     */
+    public static String chooseSubstring (String text, int length, Random rand)
+    {
+        //Throws exception if length is negative or longer than the text
+        if (length < 0 || length > text.length())
+        {
+            throw new IllegalArgumentException();
+        }
+        //Applying the formula given 
+        int numSubstrings = text.length() + 1 - length;
+        //Create a starting index between 0 and the number of substrings, which can serve as unique substring start indexes
+        int randStartIndex = rand.nextInt(numSubstrings);
+        String result = text.substring(randStartIndex, randStartIndex + length);
+        return result;
+    }
+    /**
+     *  Takes a String text and a String pattern as parameters, and returns an ArrayList<Character>. 
+     *  The returned list should contain the character that follows each non-tail occurrence of the pattern in the text.
+     *  (A non-tail occurrence of the pattern is one that is not at the very end of the text.)
+     *  The length of the list must be the same as the number of non-tail occurrences of the pattern.
+     *  The character stored at index n of the list must be the character that followed the nth non-tail occurrence of the pattern.
+     * @param text
+     * @param pattern
+     * @return
+     */
+    public static ArrayList<Character> getCharsThatFollowPattern (String text, String pattern)
+    {
+        // Create object we will return
+        ArrayList<Character> result = new ArrayList<Character>();
+        // Create a list of indexes where pattern occurs
+        ArrayList<Integer> occurrences = new ArrayList<Integer>();
+        if (!text.contains(pattern))
+        {
+            // Immediately return if the text doesn't contain the pattern
+            return result;
+        }
+        // Initialize index placeholder
+        int lastIndex = 0;
+        while (lastIndex != -1)
+        {
+            // If our list of indexes doesn't contain the pattern from our last index, add it
+            // Alternatively, if we already have the closest index, ignore it
+            if (!(occurrences.contains(text.indexOf(pattern, lastIndex))))
+            {
+                occurrences.add(text.indexOf(pattern, lastIndex));
+            }
+            // Increment last index and set itself to the next instance of the pattern
+            lastIndex++;
+            //If the last occurrence was found, lastIndex will be set to -1, ending the loop.
+            lastIndex = text.indexOf(pattern, lastIndex);
+        }
+        // For every index in occurrences
+        for (int index : occurrences)
+        {
+            // The character that follows the pattern is the pattern's first index plus its length
+            int charPatternIndex = index + pattern.length();
+            // Add the character at that index if and only if it is less than the length of the text
+            // In order to avoid invalid index exceptions
+            if (charPatternIndex < text.length())
+            {
+                result.add(text.charAt(charPatternIndex));
+            }
+        }
+        return result;
+    }
+    /**
+     * Takes a String text, a String pattern, and a random number generator as parameters. 
+     * It should randomly choose a non-tail occurrence of the pattern in the text,
+     * returning the character that immediately follows that occurrence of the pattern.
+     * If there are no non-tail occurrences of the pattern in the text, the method should throw a NoSuchElementException.
+     * @param text
+     * @param pattern
+     * @param rand
+     * @return
+     */
+    public static char pickCharThatFollowsPattern (String text, String pattern, Random rand)
+    {
+        //Get list of characters we need
+        ArrayList<Character> charList = getCharsThatFollowPattern(text, pattern);
+        //It is possible that no characters exist that follow the pattern, in which case an exception is thrown
+        if (charList.size() <= 0)
+        {
+            throw new NoSuchElementException();
+        }
+        //The char returned is taken from a random index of the list
+        char result = charList.get(rand.nextInt(charList.size()));
+        return result;
     }
 }

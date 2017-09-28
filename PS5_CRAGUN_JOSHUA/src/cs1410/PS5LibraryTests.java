@@ -28,6 +28,33 @@ public class PS5LibraryTests
         PS5Library.pickCharThatFollowsPattern("hello", "o", new Random());
     }
 
+    @Test
+    public void testPickCharThatFollowsPattern2 ()
+    {
+        Random rand = new Random();
+        int y = 0;
+        int r = 0;
+
+        for (int i = 0; i < 1000; i++)
+        {
+            char result = PS5Library.pickCharThatFollowsPattern("They are here", "he", rand);
+            if (result == 'y')
+            {
+                y++;
+            }
+            else if (result == 'r')
+            {
+                r++;
+            }
+            else
+            {
+                fail();
+            }
+        }
+
+        assertTrue(400 <= y && y <= 600 && 400 <= r && r <= 600);
+    }
+
     /**
      * This illustrates a way to do tests of methods that have a randomized behavior. When we ask for a randomly chosen
      * substring of length 4 of "abcde", about half the time we should get "abcd" and about half the time we should get
@@ -63,6 +90,18 @@ public class PS5LibraryTests
         assertTrue(400 <= abcd && abcd <= 600 && 400 <= bcde && bcde <= 600);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testChooseSubstring2 ()
+    {
+        PS5Library.chooseSubstring("abcde", -5, new Random());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testChooseSubstring3 ()
+    {
+        PS5Library.chooseSubstring("abcde", 7, new Random());
+    }
+
     /**
      * This illustrates how to make assertions about ArrayLists.
      */
@@ -73,6 +112,18 @@ public class PS5LibraryTests
         list.add('b');
         list.add('b');
         assertEquals(list, PS5Library.getCharsThatFollowPattern("abababa", "aba"));
+    }
+
+    @Test
+    public void testGetCharsThatFollowPattern2 ()
+    {
+        ArrayList<Character> list = new ArrayList<Character>();
+        list.add('a');
+        list.add('e');
+        list.add('e');
+        list.add('i');
+        list.add(' ');
+        assertEquals(list, PS5Library.getCharsThatFollowPattern("have you heard of the high elves?", "h"));
     }
 
 }
