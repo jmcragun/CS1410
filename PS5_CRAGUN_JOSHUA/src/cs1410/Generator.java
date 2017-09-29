@@ -89,16 +89,10 @@ public class Generator
         while (address == "")
         {
             address = Dialogs.showInputDialog(
-                    "Please enter a valid file address for source text.\n(Note: This is relative to the file location of Generator.java)");
+                    "Please enter a valid file address for source text.\n(Note: This is relative to the file location of the src folder)");
             // Exit the program if the exit button or cancel is pressed
             if (address == null)
             {
-                // It is possible that the scanner "input" was changed from "null", so if the user exits we should try
-                // to close input.
-                if (input != null)
-                {
-                    input.close();
-                }
                 return;
             }
             // Parsing the input may throw exceptions, so a try block is used

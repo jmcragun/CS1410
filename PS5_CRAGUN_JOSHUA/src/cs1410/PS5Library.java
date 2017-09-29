@@ -23,10 +23,10 @@ public class PS5Library
         // case a text file) as part of a project. I created a package called "books", then put two
         // text files into the package. I was then able to open one of those files as shown below. When
         // I export the project, the resources go along with it.
-        try (InputStream book = PS5Library.class.getResourceAsStream("/books/PrideAndPrejudice.txt");
+        try (InputStream book = PS5Library.class.getResourceAsStream("/books/Dylan.txt");
                 Scanner input = new Scanner(book))
         {
-            System.out.println(generateText(input, 6, 200));
+            System.out.println(generateText(input, 5, 2000));
         }
     }
 
