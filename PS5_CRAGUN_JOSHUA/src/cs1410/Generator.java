@@ -1,7 +1,8 @@
 package cs1410;
 
 import java.io.IOException;
-import java.io.InputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import cs1410lib.Dialogs;
 
@@ -21,7 +22,7 @@ public class Generator
         // Initialize needed variables
         int level = -1;
         int length = -1;
-        String address = "";
+        File file = null;
         Scanner input = null;
         // Use while loop to continually prompt the user for proper input
         while (level < 0)
@@ -85,31 +86,28 @@ public class Generator
                 length = -1;
             }
         }
-        // Use while loop to continually prompt the user for proper input
-        while (address == "")
+        while (file == null)
         {
-            address = Dialogs.showInputDialog(
-                    "Please enter a valid file address for source text.\n(Note: This is relative to the file location of the src folder)");
-            // Exit the program if the exit button or cancel is pressed
-            if (address == null)
+            file = Dialogs.showOpenFileDialog("Please select a readable file");
+            // close if exited or cancelled
+            if (file == null)
             {
                 return;
             }
-            // Parsing the input may throw exceptions, so a try block is used
+            // reading the file may throw an exception, so a try block is used
             try
             {
-                InputStream book = Generator.class.getResourceAsStream(address);
-                input = new Scanner(book);
+                input = new Scanner(file);
             }
-            // If the file address is invalid, a NullPointerExeption is thrown. If caught, give the user a message
-            // something went wrong and then set address to an empty string, forcing the loop to restart
-            catch (NullPointerException e)
+            // if the file isn't found then show a message saying the file wasn't found and reset the file to
+            // reinitialize the loop
+            catch (FileNotFoundException e)
             {
-                Dialogs.showMessageDialog("There was a problem using the file you specified. Please try again.");
-                address = "";
+                Dialogs.showMessageDialog("File not found. Please try again.");
+                file = null;
             }
-
         }
+
         // Inform user that all input was taken without issue
         Dialogs.showMessageDialog(
                 "Thank you. Your output is being computed.\nThis may take anywhere between a few seconds and a few minutes.");
@@ -124,7 +122,7 @@ public class Generator
         catch (IllegalArgumentException e)
         {
             Dialogs.showMessageDialog(
-                    "ERROR: Invalid Arguments. Terminating.\n(File must have more charcters than the level of analysis)");
+                    "ERROR: Invalid Arguments. Terminating.");
             input.close();
             return;
         }
