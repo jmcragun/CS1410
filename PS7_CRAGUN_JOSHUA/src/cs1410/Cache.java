@@ -14,8 +14,8 @@ public class Cache
     private String owner;
     private double difficulty;
     private double terrain;
-    private double latitude;
-    private double longitude;
+    private String latitude;
+    private String longitude;
 
     /**
      * Creates a Cache from a string that consists of these seven cache attributes: the GC code, the title, the owner,
@@ -27,38 +27,64 @@ public class Cache
      * <li>Fewer than seven attributes</li> (done)
      * <li>More than seven attributes</li> (done)
      * <li>A GC code that is anything other than "GC" followed by one or more upper-case letters and/or digits</li>
+     * (done)
      * <li>A difficulty or terrain rating that parses to anything other than the doubles 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5,
-     * or 5.</li>
+     * or 5.</li> (done)
      * <li>A title, owner, latitude, or longitude that consists only of white space</li> (done)
      */
     public Cache (String attributes)
     {
-        // TODO: Implement
+        // replace each tab with a newline in order to user a scanner
+        String s = attributes.replace('\t', '\n');
         try
         {
-            Scanner scnr = new Scanner(attributes);
-            gcCode = scnr.next();
-            title = scnr.next();
-            owner = scnr.next();
-            difficulty = Double.parseDouble(scnr.next());
-            terrain = Double.parseDouble(scnr.next());
-            latitude = Double.parseDouble(scnr.next());
-            longitude = Double.parseDouble(scnr.next());
-            if (scnr.hasNext())
+            Scanner scnr = new Scanner(s);
+            gcCode = scnr.nextLine();
+            // feed private field into a scanner to verify it isn't just whitespace
+            Scanner codeCheck = new Scanner(gcCode);
+            codeCheck.next();
+            codeCheck.close();
+            title = scnr.nextLine();
+            // feed private field into a scanner to verify it isn't just whitespace
+            Scanner titleCheck = new Scanner(title);
+            titleCheck.next();
+            titleCheck.close();
+            owner = scnr.nextLine();
+            // feed private field into a scanner to verify it isn't just whitespace
+            Scanner ownerCheck = new Scanner(owner);
+            ownerCheck.next();
+            ownerCheck.close();
+            difficulty = Double.parseDouble(scnr.nextLine());
+            terrain = Double.parseDouble(scnr.nextLine());
+            latitude = scnr.nextLine();
+            // feed private field into a scanner to verify it isn't just whitespace
+            Scanner latCheck = new Scanner(latitude);
+            latCheck.next();
+            latCheck.close();
+            longitude = scnr.nextLine();
+            // feed private field into a scanner to verify it isn't just whitespace
+            Scanner longCheck = new Scanner(longitude);
+            longCheck.next();
+            longCheck.close();
+            if (scnr.hasNextLine())
             {
                 scnr.close();
-                throw new IllegalArgumentException();
+                throw new Exception();
             }
             scnr.close();
         }
         catch (Exception e)
         {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Error: Bad inputs");
         }
-        if (!verifyGcCode(gcCode)) {
-            throw new IllegalArgumentException();
+        if (!verifyGcCode(gcCode))
+        {
+            throw new IllegalArgumentException("Error: Geocache code is poorly formatted");
         }
-
+        if (!verifyRating(difficulty) || !verifyRating(terrain))
+        {
+            throw new IllegalArgumentException("Error: Difficulty or terrain rating is poorly formatted");
+        }
     }
 
     /**
@@ -74,11 +100,29 @@ public class Cache
         {
             return false;
         }
-        if (!code.matches("[A-Z]|[0-9]"))
+        if (!code.matches("^[A-Z0-9]+$"))
         {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Private helper method that makes sure a given rating is 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, or 5.
+     * 
+     * @param rating
+     * @return
+     */
+    private static boolean verifyRating (double rating)
+    {
+        if (rating % .5 != 0 || (rating < 1 || rating > 5))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
     }
 
     /**
@@ -94,8 +138,7 @@ public class Cache
      */
     public String getOwner ()
     {
-        // TODO: Implement
-        return "";
+        return this.owner;
     }
 
     /**
@@ -103,8 +146,7 @@ public class Cache
      */
     public String getTitle ()
     {
-        // TODO: Implement
-        return "";
+        return this.title;
     }
 
     /**
@@ -112,8 +154,7 @@ public class Cache
      */
     public double getDifficulty ()
     {
-        // TODO: Implement
-        return 1.0;
+        return this.difficulty;
     }
 
     /**
@@ -121,8 +162,7 @@ public class Cache
      */
     public double getTerrain ()
     {
-        // TODO: Implement
-        return 1.0;
+        return this.terrain;
     }
 
     /**
@@ -130,8 +170,7 @@ public class Cache
      */
     public String getGcCode ()
     {
-        // TODO: Implement
-        return "";
+        return this.gcCode;
     }
 
     /**
@@ -139,8 +178,7 @@ public class Cache
      */
     public String getLatitude ()
     {
-        // TODO: Implement
-        return "";
+        return this.latitude;
     }
 
     /**
@@ -148,7 +186,6 @@ public class Cache
      */
     public String getLongitude ()
     {
-        // TODO: Implement
-        return "";
+        return this.longitude;
     }
 }
