@@ -22,8 +22,16 @@ public class CacheList
     // The caches being managed by this CacheList. They are arranged in
     // ascending order according to cache title.
     private ArrayList<Cache> allCaches;
+    // Stores title keyword when searching for a specific geocache
+    private String titleConstraint;
+    // Stores owner keyword when searching for a specific geocache
+    private String ownerConstraint;
+    // Stores the minimum and maximum difficulty and terrain constraints
+    private double minDifficultyConstraint;
+    private double maxDifficultyConstraint;
+    private double minTerrainConstraint;
+    private double maxTerrainConstraint;
 
-    // TODO: Put remainder of representation here
 
     /**
      * Creates a CacheList from the specified Scanner. Each line of the Scanner should contain the description of a
@@ -41,11 +49,32 @@ public class CacheList
      */
     public CacheList (Scanner caches) throws IOException
     {
-        // TODO: Complete this implementation
         allCaches = new ArrayList<Cache>();
+        while (caches.hasNextLine())
+        {
+            // We keep track of the line number in order to report it if something goes wrong.
+            int line = 1;
+            // initializing caches may throw exceptions so a try block is used
+            try
+            {
+                allCaches.add(new Cache(caches.nextLine()));
+                line++;
 
+            }
+            catch (IllegalArgumentException e)
+            {
+                throw new IllegalArgumentException("Error on line " + line + "of input");
+            }
+        }
         // Sort the list of caches
         Collections.sort(allCaches, (c1, c2) -> c1.getTitle().compareToIgnoreCase(c2.getTitle()));
+        // Set other attributes to specified starting conditions.
+        titleConstraint = "";
+        ownerConstraint = "";
+        minDifficultyConstraint = 1.0;
+        maxDifficultyConstraint = 5.0;
+        minTerrainConstraint = 1.0;
+        maxTerrainConstraint = 5.0;
     }
 
     /**
@@ -53,7 +82,7 @@ public class CacheList
      */
     public void setTitleConstraint (String title)
     {
-        // TODO: Implement
+        titleConstraint = title;
     }
 
     /**
@@ -61,7 +90,7 @@ public class CacheList
      */
     public void setOwnerConstraint (String owner)
     {
-        // TODO: Implement
+        ownerConstraint = owner;
     }
 
     /**
@@ -69,7 +98,8 @@ public class CacheList
      */
     public void setDifficultyConstraints (double min, double max)
     {
-        // TODO: Implement
+        minDifficultyConstraint = min;
+        maxDifficultyConstraint = max;
     }
 
     /**
@@ -77,7 +107,8 @@ public class CacheList
      */
     public void setTerrainConstraints (double min, double max)
     {
-        // TODO: Implement
+        minTerrainConstraint = min;
+        maxTerrainConstraint = max;
     }
 
     /**
@@ -90,8 +121,22 @@ public class CacheList
      */
     public ArrayList<Cache> select ()
     {
-        // TODO: Complete this implementation
         ArrayList<Cache> caches = new ArrayList<Cache>();
+        // Search throw every cache in our list of caches.
+        for (Cache cache : allCaches)
+        {
+            // Add caches that meet aforementioned constraints.
+            if (cache.getTitle().toLowerCase().contains(titleConstraint.toLowerCase())
+                    && cache.getOwner().toLowerCase().contains(ownerConstraint.toLowerCase())
+                    && (cache.getDifficulty() >= minDifficultyConstraint
+                            && cache.getDifficulty() <= maxDifficultyConstraint)
+                    && (cache.getTerrain() >= minTerrainConstraint && cache.getTerrain() <= maxTerrainConstraint))
+            {
+                caches.add(cache);
+            }
+        }
+        // Finally, sort the collection
+        Collections.sort(caches, (c1, c2) -> c1.getTitle().compareToIgnoreCase(c2.getTitle()));
         return caches;
     }
 
@@ -101,9 +146,15 @@ public class CacheList
      */
     public ArrayList<String> getOwners ()
     {
-        // TODO: Complete this implementation
         ArrayList<String> owners = new ArrayList<String>();
-
+        // Search through every cache and add their owner if it hasn't been already.
+        for (Cache cache : this.allCaches)
+        {
+            if (!owners.contains(cache.getOwner()))
+            {
+                owners.add(cache.getOwner());
+            }
+        }
         // Sort the list of owners
         Collections.sort(owners, (s1, s2) -> s1.compareToIgnoreCase(s2));
         return owners;

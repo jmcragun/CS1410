@@ -10,11 +10,8 @@ public class Hello
      */
     public static void main (String[] args)
     {
-        String input = Dialogs.showInputDialog("Enter degrees F:");
-        double tempF = Double.parseDouble(input);
-        double tempC = (tempF - 32) * 5.0 / 9.0;
-        Dialogs.showMessageDialog("Degrees C: " + tempC);
-        System.out.println(f("apples"));
+        int[] nums = new int[3];
+        System.out.println(nums[4]);
     }
 
     /**

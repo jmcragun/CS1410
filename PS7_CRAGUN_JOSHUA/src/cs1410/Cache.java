@@ -8,12 +8,18 @@ import java.util.Scanner;
  */
 public class Cache
 {
-    // TODO: Put representation here
+    // The attributes of a cache are given by these instance variables
+    // Stores geocache code
     private String gcCode;
+    // Stores cache title
     private String title;
+    // Stores cache owner
     private String owner;
+    // Stores cache difficulty rating
     private double difficulty;
+    // Stores terrain difficulty rating
     private double terrain;
+    // Stores latitude and longitude coordinates
     private String latitude;
     private String longitude;
 
@@ -73,10 +79,14 @@ public class Cache
             }
             scnr.close();
         }
+        // If something goes wrong in the assigning process then we know that either A.) There are fewer or more than 7
+        // attributes, B.) an attribute was just whitespace, or C.) difficulty and terrain attributes were not numbers.
+        // Either way the in put was poorly formatted, so an IllegalArgumentException is thrown.
         catch (Exception e)
         {
             throw new IllegalArgumentException("Error: Bad inputs");
         }
+        // Make sure the geocache code is valid and that the doubles follow the pattern described.
         if (!verifyGcCode(gcCode))
         {
             throw new IllegalArgumentException("Error: Geocache code is poorly formatted");
@@ -95,11 +105,13 @@ public class Cache
      */
     private static boolean verifyGcCode (String code)
     {
+        // Make sure the first to chars are G and C
         String front = code.substring(0, 2);
         if (!front.equals("GC"))
         {
             return false;
         }
+        // Make sure the code is only A-Z or 0-9.
         if (!code.matches("^[A-Z0-9]+$"))
         {
             return false;
@@ -115,6 +127,7 @@ public class Cache
      */
     private static boolean verifyRating (double rating)
     {
+        // return false if the double isn't evenly divisible by .5 or is less than 1 or greater than 5. 
         if (rating % .5 != 0 || (rating < 1 || rating > 5))
         {
             return false;
