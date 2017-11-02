@@ -32,7 +32,6 @@ public class CacheList
     private double minTerrainConstraint;
     private double maxTerrainConstraint;
 
-
     /**
      * Creates a CacheList from the specified Scanner. Each line of the Scanner should contain the description of a
      * cache in a format suitable for consumption by the Cache constructor. The resulting CacheList should contain one
@@ -61,6 +60,7 @@ public class CacheList
                 line++;
 
             }
+
             catch (IllegalArgumentException e)
             {
                 throw new IllegalArgumentException("Error on line " + line + "of input");

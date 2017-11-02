@@ -32,6 +32,23 @@ public class MyScanner
         tokens = input.trim().split("\\s+");
         used = 0;
     }
+    
+    /**
+     * Returns true if this scanner has another token in its input.
+     * 
+     * @return
+     */
+    public boolean hasNext ()
+    {
+        if (used < tokens.length)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
 
     /**
      * Finds and returns the next complete token from this scanner.
@@ -55,24 +72,26 @@ public class MyScanner
             throw new NoSuchElementException();
         }
     }
-
+    
     /**
-     * Returns true if this scanner has another token in its input.
+     * Returns true if the next token in this scanner's input can be interpreted as an int value using the nextInt()
+     * method.
      * 
      * @return
      */
-    public boolean hasNext ()
+    public boolean hasNextInt ()
     {
-        if (used < tokens.length)
+        try
         {
-            return true;
+            this.nextInt();
         }
-        else
+        catch (Exception e)
         {
             return false;
         }
+        return true;
     }
-
+    
     /**
      * Scans the next token of the input as an int. Returns int if token passes the scan, otherwise throws and
      * exception.
@@ -95,24 +114,5 @@ public class MyScanner
         {
             throw new InputMismatchException();
         }
-    }
-
-    /**
-     * Returns true if the next token in this scanner's input can be interpreted as an int value using the nextInt()
-     * method.
-     * 
-     * @return
-     */
-    public boolean hasNextInt ()
-    {
-        try
-        {
-            this.nextInt();
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-        return true;
     }
 }

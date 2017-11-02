@@ -33,4 +33,14 @@ public class CacheListTests
         File file = new File("C:\\Program Files (x86)\\a");
         new CacheList(new Scanner(file));
     }
+    @Test
+    public void test4 () throws IOException
+    {
+        CacheList clist = new CacheList(new Scanner(
+                "GCABCD\tAs The World Turns\tbunny\t1\t1\tN40 45.875\tW111 48.986\nGCRQWK\tOld Three Tooth\tgeocadet\t3.5\t3\tN40 45.850\tW111 48.045\n"));
+        clist.setOwnerConstraint("geo");
+        ArrayList<Cache> selected = clist.select();
+        assertEquals(1, selected.size());
+        assertEquals("GCRQWK", selected.get(0).getGcCode());
+    }
 }
