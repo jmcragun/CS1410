@@ -82,6 +82,9 @@ public class BigRat
             d.multiply(new BigInteger("-1"));
             r.multiply(new BigInteger("-1"));
         }
+        BigInteger g = d.gcd(r);
+        bigNum = r.divide(g);
+        bigDen = d.divide(g);
     }
 
     /**
