@@ -25,6 +25,30 @@ public class C4Board
     /** The number used to indicate a tie */
     public static final int TIE = 3;
 
+    /** The number of rows in the game */
+    private int gameRows;
+
+    /** The number of columns in the game */
+    private int gameCols;
+
+    /** The board */
+    private int[][] board;
+
+    /** Number of turns taken in a game */
+    private int turns;
+
+    /** Number of P1's wins */
+    private int p1Wins;
+
+    /** Number of P2's wins */
+    private int p2Wins;
+
+    /** Number of ties */
+    private int ties;
+
+    /** Says if the game is over or not */
+    private boolean gameOver;
+
     /**
      * Creates a C4Board with the specified number of rows and columns. There should be no pieces on the board and it
      * should be player 1's turn to move.
@@ -33,6 +57,20 @@ public class C4Board
      */
     public C4Board (int rows, int cols)
     {
+        if (rows < 4 || cols < 4)
+        {
+            throw new IllegalArgumentException();
+        }
+        else
+        {
+            gameRows = rows;
+            gameCols = cols;
+            turns = 1;
+            p1Wins = 0;
+            p2Wins = 0;
+            gameOver = false;
+            board = new int[rows][cols];
+        }
     }
 
     /**
@@ -42,6 +80,16 @@ public class C4Board
      */
     public void newGame ()
     {
+        board = new int[gameRows][gameCols];
+        gameOver = false;
+        if (turns % 2 == 1)
+        {
+            turns = 1;
+        }
+        else if (turns % 2 == 0)
+        {
+            turns = 0;
+        }
     }
 
     /**
@@ -56,6 +104,45 @@ public class C4Board
      */
     public int moveTo (int col)
     {
+        if (!(col < gameCols) || col < 0)
+        {
+            throw new IllegalArgumentException();
+        }
+        int row = 0;
+        for (row = 0; row < gameRows; row++)
+        {
+            if (this.getOccupant(row, col) == 0)
+            {
+                if (turns % 2 == 1)
+                {
+                    this.board[row][col] = P1;
+                    turns++;
+                    if (FourInARow.fourInRow(board))
+                    {
+                        p1Wins++;
+                        gameOver = true;
+                        return P1;
+                    }
+                }
+                else
+                {
+                    this.board[row][col] = P2;
+                    turns++;
+                    if (FourInARow.fourInRow(board))
+                    {
+                        p2Wins++;
+                        gameOver = true;
+                        return P2;
+                    }
+                }
+                break;
+            }
+        }
+        if (this.isTie(board))
+        {
+            ties++;
+            return TIE;
+        }
         return 0;
     }
 
@@ -66,7 +153,18 @@ public class C4Board
      */
     public int getOccupant (int row, int col)
     {
-        return 0;
+        if (this.board[row][col] == P1)
+        {
+            return P1;
+        }
+        else if (this.board[row][col] == P2)
+        {
+            return P2;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     /**
@@ -75,7 +173,18 @@ public class C4Board
      */
     public int getToMove ()
     {
-        return 0;
+        if (gameOver == true)
+        {
+            return 0;
+        }
+        else if (turns % 2 == 1)
+        {
+            return P1;
+        }
+        else
+        {
+            return P2;
+        }
     }
 
     /**
@@ -83,7 +192,7 @@ public class C4Board
      */
     public int getWinsForP1 ()
     {
-        return 0;
+        return p1Wins;
     }
 
     /**
@@ -91,7 +200,7 @@ public class C4Board
      */
     public int getWinsForP2 ()
     {
-        return 0;
+        return p2Wins;
     }
 
     /**
@@ -99,6 +208,21 @@ public class C4Board
      */
     public int getTies ()
     {
-        return 0;
+        return ties;
+    }
+
+    private boolean isTie (int A[][])
+    {
+        for (int i = 0; i < A.length; i++)
+        {
+            for (int j = 0; j < A[i].length; j++)
+            {
+                if (this.getOccupant(i, j) == 0)
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

@@ -11,28 +11,20 @@ public class BigRat
     /**
      * The numerator of this Rat. The gcd of |num| and den is always 1.
      */
-    private long num;
+    private long longNum;
 
     /**
      * The denominator of this Rat. den must be positive.
      */
-    private long den;
-    /**
-     * The numerator of a BigRat with BigIntegers as inputs. The gcd of |bigNum| and bigDen is always 1.
-     */
-    private BigInteger bigNum;
-    /**
-     * The denominator of a BigRat with BigIntegers as inputs. Must be positive.
-     */
-    private BigInteger bigDen;
-    
+    private long longDen;
+
     /**
      * Creates the rational number 0
      */
     public BigRat ()
     {
-        num = 0;
-        den = 1;
+        longNum = 0;
+        longDen = 1;
     }
 
     /**
@@ -40,8 +32,8 @@ public class BigRat
      */
     public BigRat (long n)
     {
-        num = n;
-        den = 1;
+        longNum = n;
+        longDen = 1;
     }
 
     /**
@@ -63,8 +55,26 @@ public class BigRat
 
         // Deal with lowest terms
         long g = gcd(Math.abs(n), d);
-        num = n / g;
-        den = d / g;
+        longNum = n / g;
+        longDen = d / g;
+    }
+
+    /**
+     * The numerator of a BigRat with BigIntegers as inputs. The gcd of |bigNum| and bigDen is always 1.
+     */
+    private BigInteger num;
+    /**
+     * The denominator of a BigRat with BigIntegers as inputs. Must be positive.
+     */
+    private BigInteger den;
+
+    /**
+     * Creates the rational number n
+     */
+    public BigRat (BigInteger n)
+    {
+        num = n;
+        den = new BigInteger("1");
     }
 
     /**
@@ -79,12 +89,12 @@ public class BigRat
         // handles signs
         if (d.compareTo(new BigInteger("0")) < 0)
         {
-            d.multiply(new BigInteger("-1"));
-            r.multiply(new BigInteger("-1"));
+            d = d.multiply(new BigInteger("-1"));
+            r = r.multiply(new BigInteger("-1"));
         }
         BigInteger g = d.gcd(r);
-        bigNum = r.divide(g);
-        bigDen = d.divide(g);
+        num = r.divide(g);
+        den = d.divide(g);
     }
 
     /**
@@ -93,9 +103,18 @@ public class BigRat
      */
     public BigRat add (BigRat r)
     {
-        long n = this.num * r.den + this.den * r.num;
-        long d = this.den * r.den;
-        return new BigRat(n, d);
+        if (this.num != null)
+        {
+            BigInteger n = this.num.multiply(r.den).add(this.den.multiply(r.num));
+            BigInteger d = this.den.multiply(r.den);
+            return new BigRat(n, d);
+        }
+        else
+        {
+            long n = this.longNum * r.longDen + this.longDen * r.longNum;
+            long d = this.longDen * r.longDen;
+            return new BigRat(n, d);
+        }
     }
 
     /**
@@ -103,9 +122,18 @@ public class BigRat
      */
     public BigRat sub (BigRat r)
     {
-        long n = this.num * r.den - this.den * r.num;
-        long d = this.den * r.den;
-        return new BigRat(n, d);
+        if (this.num != null)
+        {
+            BigInteger n = this.num.multiply(r.den).subtract(this.den.multiply(r.num));
+            BigInteger d = this.den.multiply(r.den);
+            return new BigRat(n, d);
+        }
+        else
+        {
+            long n = this.longNum * r.longDen - this.longDen * r.longNum;
+            long d = this.longDen * r.longDen;
+            return new BigRat(n, d);
+        }
     }
 
     /**
@@ -114,7 +142,14 @@ public class BigRat
      */
     public BigRat mul (BigRat r)
     {
-        return new BigRat(this.num * r.num, this.den * r.den);
+        if (this.num != null)
+        {
+            return new BigRat(this.num.multiply(r.num), this.den.multiply(r.den));
+        }
+        else
+        {
+            return new BigRat(this.longNum * r.longNum, this.longDen * r.longDen);
+        }
     }
 
     /**
@@ -123,13 +158,27 @@ public class BigRat
      */
     public BigRat div (BigRat r)
     {
-        if (r.num == 0)
+        if (this.num != null)
         {
-            throw new IllegalArgumentException();
+            if (r.num.intValue() == 0)
+            {
+                throw new IllegalArgumentException();
+            }
+            else
+            {
+                return new BigRat(this.num.multiply(r.den), this.den.multiply(r.num));
+            }
         }
         else
         {
-            return new BigRat(this.num * r.den, this.den * r.num);
+            if (r.longNum == 0)
+            {
+                throw new IllegalArgumentException();
+            }
+            else
+            {
+                return new BigRat(this.longNum * r.longDen, this.longDen * r.longNum);
+            }
         }
     }
 
@@ -139,18 +188,37 @@ public class BigRat
      */
     public int compareTo (BigRat r)
     {
-        long diff = this.num * r.den - this.den * r.num;
-        if (diff < 0)
+        if (this.num != null)
         {
-            return -1;
-        }
-        else if (diff > 0)
-        {
-            return 1;
+            BigInteger diff = this.num.multiply(r.den).subtract(this.den.multiply(r.num));
+            if (diff.compareTo(new BigInteger("0")) < 0)
+            {
+                return -1;
+            }
+            else if (diff.compareTo(new BigInteger("0")) > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
         else
         {
-            return 0;
+            long diff = this.longNum * r.longDen - this.longDen * r.longNum;
+            if (diff < 0)
+            {
+                return -1;
+            }
+            else if (diff > 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
         }
     }
 
@@ -160,18 +228,35 @@ public class BigRat
      */
     public String toString ()
     {
-        if (den == 1)
+        if (this.num != null)
         {
-            return num + "";
+            if (this.den.intValue() == 1 || this.num.intValue() == 0)
+            {
+                return this.num.toString() + "";
+            }
+            else
+            {
+                return this.num.toString() + "/" + this.den.toString();
+            }
         }
         else
         {
-            return num + "/" + den;
+            if (longDen == 1)
+            {
+                return longNum + "";
+            }
+            else
+            {
+                return longNum + "/" + longDen;
+            }
         }
     }
-
     /**
      * Returns the greatest common divisor of a and b, where a >= 0 and b > 0.
+     * 
+     * @param a
+     * @param b
+     * @return
      */
     public static long gcd (long a, long b)
     {
@@ -183,4 +268,5 @@ public class BigRat
         }
         return a;
     }
+
 }
