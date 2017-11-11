@@ -38,6 +38,14 @@ public class C4BoardTests
         testBoard.moveTo(3);
         testBoard.moveTo(2);
         testBoard.moveTo(3);
+        try
+        {
+            testBoard.getOccupant(5, 5);
+            fail("No exception thrown");
+        }
+        catch (IllegalArgumentException e)
+        {
+        }
         assertEquals(1, testBoard.getOccupant(2, 3));
         assertEquals(2, testBoard.getOccupant(2, 2));
         assertEquals(1, testBoard.getWinsForP1());

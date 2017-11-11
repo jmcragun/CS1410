@@ -34,9 +34,6 @@ public class C4Board
     /** The board */
     private int[][] board;
 
-    /** Number of turns taken in a game */
-    private int turns;
-
     /** Number of P1's wins */
     private int p1Wins;
 
@@ -48,6 +45,12 @@ public class C4Board
 
     /** Says if the game is over or not */
     private boolean gameOver;
+
+    /** Says if P1 went first */
+    private boolean p1First;
+
+    /** Says if it's P1's turn */
+    private boolean p1Turn;
 
     /**
      * Creates a C4Board with the specified number of rows and columns. There should be no pieces on the board and it
@@ -63,12 +66,14 @@ public class C4Board
         }
         else
         {
+            // Initializes default instance variables
             gameRows = rows;
             gameCols = cols;
-            turns = 1;
             p1Wins = 0;
             p2Wins = 0;
             gameOver = false;
+            p1First = true;
+            p1Turn = true;
             board = new int[rows][cols];
         }
     }
@@ -80,15 +85,19 @@ public class C4Board
      */
     public void newGame ()
     {
+        // Empty the board, keep the size
         board = new int[gameRows][gameCols];
+        // Switch who takes the first turn between each game
         gameOver = false;
-        if (turns % 2 == 1)
+        if (p1First == true)
         {
-            turns = 1;
+            p1First = false;
+            p1Turn = false;
         }
-        else if (turns % 2 == 0)
+        else if (p1First == false)
         {
-            turns = 0;
+            p1First = true;
+            p1Turn = true;
         }
     }
 
@@ -104,19 +113,23 @@ public class C4Board
      */
     public int moveTo (int col)
     {
+        // Check to make sure the column is valid
         if (!(col < gameCols) || col < 0)
         {
             throw new IllegalArgumentException();
         }
+        // Find lowest available row in a column
         int row = 0;
         for (row = 0; row < gameRows; row++)
         {
             if (this.getOccupant(row, col) == 0)
             {
-                if (turns % 2 == 1)
+                if (p1Turn == true && gameOver == false)
                 {
+                    // Add P1's move
                     this.board[row][col] = P1;
-                    turns++;
+                    p1Turn = false;
+                    // Check if it was a winning move
                     if (FourInARow.fourInRow(board))
                     {
                         p1Wins++;
@@ -124,10 +137,12 @@ public class C4Board
                         return P1;
                     }
                 }
-                else
+                else if (p1Turn == false && gameOver == false)
                 {
+                    // Add P2's move
                     this.board[row][col] = P2;
-                    turns++;
+                    p1Turn = true;
+                    // Check if it was a winning move
                     if (FourInARow.fourInRow(board))
                     {
                         p2Wins++;
@@ -138,11 +153,13 @@ public class C4Board
                 break;
             }
         }
+        // After any possible move was made, check if a tie has occurred
         if (this.isTie(board))
         {
             ties++;
             return TIE;
         }
+        // Otherwise return 0
         return 0;
     }
 
@@ -153,14 +170,22 @@ public class C4Board
      */
     public int getOccupant (int row, int col)
     {
-        if (this.board[row][col] == P1)
+        // Check that the arguments are valid
+        if ((!(row < gameRows) || row < 0) || (!(col < gameCols) || col < 0))
+        {
+            throw new IllegalArgumentException();
+        }
+        // If the value in the board at the coordinates is 1, then return P1
+        else if (this.board[row][col] == P1)
         {
             return P1;
         }
+        // If the value in the board at the coordinates is 2, then return P2
         else if (this.board[row][col] == P2)
         {
             return P2;
         }
+        // Otherwise, return 0
         else
         {
             return 0;
@@ -177,7 +202,7 @@ public class C4Board
         {
             return 0;
         }
-        else if (turns % 2 == 1)
+        else if (p1Turn == true)
         {
             return P1;
         }
