@@ -13,9 +13,9 @@ public class LightsOutView extends JFrame implements ActionListener
     private final static int HEIGHT = 600;
     public final static int ROWS = 5;
     public final static int COLS = 5;
-    public final static Color BACKGROUND_COLOR = Color.BLUE;
+    public final static Color BACKGROUND_COLOR = Color.GRAY;
     public final static Color ON = Color.YELLOW;
-    public final static Color OFF = Color.GRAY;
+    public final static Color OFF = Color.BLACK;
     public final static int BORDER = 5;
     public final static int FONT_SIZE = 20;
 
@@ -28,8 +28,10 @@ public class LightsOutView extends JFrame implements ActionListener
     /** The portion of the GUI that contains the playing surface **/
     private Board board;
 
+    /** Button for starting a new game */
     private JButton newGame;
 
+    /** Button for entering into custom mode */
     private JButton customMode;
 
     public LightsOutView ()
@@ -74,25 +76,35 @@ public class LightsOutView extends JFrame implements ActionListener
         newGame = new JButton("New Game");
         newGame.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         newGame.setForeground(Color.BLACK);
-        newGame.setBackground(BACKGROUND_COLOR);
+        newGame.setBackground(ON);
         newGame.addActionListener(this);
         buttons.add(newGame, "West");
 
-        // The bottom portion contains the Custom Mode button
         customMode = new JButton("Custom Mode");
-        newGame.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
-        newGame.setForeground(Color.BLACK);
-        newGame.setBackground(BACKGROUND_COLOR);
-        newGame.addActionListener(this);
+        customMode.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
+        customMode.setForeground(Color.BLACK);
+        customMode.setBackground(ON);
+        customMode.addActionListener(this);
         buttons.add(customMode, "East");
-    }
 
+        // Refresh the display and we're ready
+        board.refresh();
+        setVisible(true);
+    }
+    
+    /**
+     * Updates the player's number of wins
+     * @param n
+     */
     public void setWins (int n)
     {
         wins.setText("Wins: " + n);
         return;
     }
-
+    
+    /**
+     * Provides functionality for the new game and custom mode buttons
+     */
     @Override
     public void actionPerformed (ActionEvent e)
     {
@@ -103,11 +115,30 @@ public class LightsOutView extends JFrame implements ActionListener
         }
         else
         {
-            model.switchModes();
-            board.refresh();
+            if (this.model.isCustomMode())
+            {
+                if (model.switchModes())
+                {
+                    JOptionPane.showMessageDialog(this, "Your puzzle is not solvable!");
+                    board.refresh();
+                    return;
+                }
+                else
+                {
+                    this.customMode.setText("Custom Mode");
+                    board.refresh();
+                    return;
+                }
+            }
+            else
+            {
+                model.switchModes();
+                this.customMode.setText("Exit Custom Mode");
+                board.refresh();
+            }
         }
-    }
 
+    }
 }
 
 @SuppressWarnings("serial")
@@ -133,7 +164,7 @@ class Board extends JPanel implements MouseListener
         setLayout(new GridLayout(LightsOutView.ROWS, LightsOutView.COLS));
 
         // Create and lay out the grid of squares that make up the game.
-        for (int i = LightsOutView.ROWS - 1; i >= 0; i--)
+        for (int i = 0; i < LightsOutView.ROWS; i++)
         {
             for (int j = 0; j < LightsOutView.COLS; j++)
             {
@@ -174,7 +205,10 @@ class Board extends JPanel implements MouseListener
     public void mouseClicked (MouseEvent e)
     {
     }
-
+    
+    /**
+     * Makes so that clicking on a square does something
+     */
     @Override
     public void mousePressed (MouseEvent e)
     {

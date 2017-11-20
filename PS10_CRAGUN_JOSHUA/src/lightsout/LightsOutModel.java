@@ -2,21 +2,30 @@ package lightsout;
 
 import java.util.Random;
 
+/**
+ * This class provides an abstract version of the game which the GUI depends on
+ */
 public class LightsOutModel
 {
     /** The number of rows and columns in a traditional Lights Out game. */
     private final static int ROWS = 5;
     private final static int COLS = 5;
     /** First key to test if a board configuration is solvable */
-    private final static int[][] KEY1 = { { 0, 1, 1, 1, 0 }, { 1, 0, 1, 0, 1 }, { 1, 1, 0, 1, 1 }, { 1, 0, 1, 0, 1 },
+    private final static int[][] KEY1 = {
+            { 0, 1, 1, 1, 0 },
+            { 1, 0, 1, 0, 1 },
+            { 1, 1, 0, 1, 1 },
+            { 1, 0, 1, 0, 1 },
             { 0, 1, 1, 1, 0 } };
     /** Second key to test if a board configuration is solvable */
-    private final static int[][] KEY2 = { { 1, 0, 1, 0, 1 }, { 1, 0, 1, 0, 1 }, { 0, 0, 0, 0, 0 }, { 1, 0, 1, 0, 1 },
+    private final static int[][] KEY2 = {
+            { 1, 0, 1, 0, 1 },
+            { 1, 0, 1, 0, 1 },
+            { 0, 0, 0, 0, 0 },
+            { 1, 0, 1, 0, 1 },
             { 1, 0, 1, 0, 1 } };
     /** The number used to indicate if a light is on */
     public static final int ON = 1;
-    /** The number used to indicate if a light is off */
-    public static final int OFF = 0;
     /** The board */
     private int[][] board;
     /** Number of wins */
@@ -51,19 +60,21 @@ public class LightsOutModel
 
     /**
      * Switches between normal and custom mode. When exiting it makes sure that the board configuration is solvable
-     * before returning to normal mode. If it is not, it remains in custom mode. Returns the now current state of customMode.
+     * before returning to normal mode. If it is not, it remains in custom mode. Returns the now current state of
+     * customMode.
      * 
      * @return
      */
     public boolean switchModes ()
     {
-        if (customMode)
+        if (this.customMode)
         {
             if (!this.verifyBoard())
             {
                 return true;
             }
-            customMode = false;
+            this.customMode = false;
+            this.gameOver = false;
             return false;
         }
         else
@@ -86,13 +97,13 @@ public class LightsOutModel
         {
             throw new IllegalArgumentException();
         }
-        else if (this.customMode)
+        else if (this.isCustomMode())
         {
             // Switches the button pressed from on to off and vice versa
             this.board[row][col] ^= ON;
             return 0;
         }
-        else if (!this.isGameOver())
+        else if (!this.isGameOver() && !this.customMode)
         {
             // Switches the button pressed from on to off and vice versa
             this.board[row][col] ^= ON;
@@ -236,7 +247,7 @@ public class LightsOutModel
     private void generateConfig ()
     {
         Random rand = new Random();
-        int moves = rand.nextInt();
+        int moves = rand.nextInt(500);
         int row;
         int col;
         for (int i = 0; i < moves; i++)
