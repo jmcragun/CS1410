@@ -15,7 +15,7 @@ public class LightsOutView extends JFrame implements ActionListener
     public final static int COLS = 5;
     public final static Color BACKGROUND_COLOR = Color.BLUE;
     public final static Color ON = Color.YELLOW;
-    public final static Color OFF = Color.BLACK;
+    public final static Color OFF = Color.GRAY;
     public final static int BORDER = 5;
     public final static int FONT_SIZE = 20;
 
@@ -27,6 +27,10 @@ public class LightsOutView extends JFrame implements ActionListener
 
     /** The portion of the GUI that contains the playing surface **/
     private Board board;
+
+    private JButton newGame;
+
+    private JButton customMode;
 
     public LightsOutView ()
     {
@@ -44,6 +48,64 @@ public class LightsOutView extends JFrame implements ActionListener
         root.setLayout(new BorderLayout());
         setContentPane(root);
 
+        // The center portion contains the playing board
+        model = new LightsOutModel();
+        board = new Board(model, this);
+        root.add(board, "Center");
+
+        // The top portion contains the score
+        JPanel score = new JPanel();
+        score.setLayout(new BorderLayout());
+        root.add(score, "North");
+        JPanel p = new JPanel();
+        p.setBackground(BACKGROUND_COLOR);
+        wins = new JLabel("Wins: 0");
+        wins.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
+        wins.setForeground(Color.BLACK);
+        wins.setBorder(new EmptyBorder(0, BORDER, 0, BORDER));
+        p.add(wins);
+        score.add(p, "West");
+
+        // The bottom portion contains the New Game button and the custom game button
+        JPanel buttons = new JPanel();
+        buttons.setLayout(new BorderLayout());
+        root.add(buttons, "South");
+
+        newGame = new JButton("New Game");
+        newGame.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
+        newGame.setForeground(Color.BLACK);
+        newGame.setBackground(BACKGROUND_COLOR);
+        newGame.addActionListener(this);
+        buttons.add(newGame, "West");
+
+        // The bottom portion contains the Custom Mode button
+        customMode = new JButton("Custom Mode");
+        newGame.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
+        newGame.setForeground(Color.BLACK);
+        newGame.setBackground(BACKGROUND_COLOR);
+        newGame.addActionListener(this);
+        buttons.add(customMode, "East");
+    }
+
+    public void setWins (int n)
+    {
+        wins.setText("Wins: " + n);
+        return;
+    }
+
+    @Override
+    public void actionPerformed (ActionEvent e)
+    {
+        if (e.getSource() == this.newGame)
+        {
+            model.newGame();
+            board.refresh();
+        }
+        else
+        {
+            model.switchModes();
+            board.refresh();
+        }
     }
 
 }
@@ -67,6 +129,7 @@ class Board extends JPanel implements MouseListener
         this.display = display;
 
         // Set the background color and the layout
+        // setBackground(LightsOutView.BACKGROUND_COLOR);
         setLayout(new GridLayout(LightsOutView.ROWS, LightsOutView.COLS));
 
         // Create and lay out the grid of squares that make up the game.
@@ -79,20 +142,64 @@ class Board extends JPanel implements MouseListener
                 add(s);
             }
         }
-        /**
-         * Refreshes the display. This should be called whenever something changes in the model.
-         */
-        public void refresh ()
-        {
-            // Iterate through all of the squares that make up the grid
-            Component[] squares = getComponents();
-            for (Component c : squares)
-            {
-                Square s = (Square) c;
+    }
 
-                // Set the color of the squares appropriately
+    /**
+     * Refreshes the display. This should be called whenever something changes in the model.
+     */
+    public void refresh ()
+    {
+        // Iterate through all of the squares that make up the grid
+        Component[] squares = getComponents();
+        for (Component c : squares)
+        {
+            Square s = (Square) c;
+
+            // Set the color of the squares appropriately
+            boolean status = model.isActivated(s.getRow(), s.getCol());
+            if (status)
+            {
+                s.setColor(LightsOutView.ON);
+            }
+            else
+            {
+                s.setColor(LightsOutView.OFF);
             }
         }
+        display.setWins(model.getWins());
+        repaint();
+    }
+
+    @Override
+    public void mouseClicked (MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mousePressed (MouseEvent e)
+    {
+        Square s = (Square) e.getSource();
+        int result = model.pressButton(s.getRow(), s.getCol());
+        refresh();
+        if (result == 1)
+        {
+            JOptionPane.showMessageDialog(this, "You solved the puzzle, well done!");
+        }
+    }
+
+    @Override
+    public void mouseReleased (MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseEntered (MouseEvent e)
+    {
+    }
+
+    @Override
+    public void mouseExited (MouseEvent e)
+    {
     }
 }
 

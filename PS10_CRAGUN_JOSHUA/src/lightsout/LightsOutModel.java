@@ -75,7 +75,7 @@ public class LightsOutModel
 
     /**
      * Makes a move on the board, lighting up all lights adjacent but non-diagonal to the selected space in addition to
-     * the button that was pushed. Returns 1 if the move won the game or if the game is already won.
+     * the button that was pushed. Returns 1 if the move won the game and 2 if the game is already won.
      * 
      * @param row
      * @param col
@@ -92,7 +92,7 @@ public class LightsOutModel
             this.board[row][col] ^= ON;
             return 0;
         }
-        else if (!this.gameOver)
+        else if (!this.isGameOver())
         {
             // Switches the button pressed from on to off and vice versa
             this.board[row][col] ^= ON;
@@ -133,7 +133,7 @@ public class LightsOutModel
             }
             return 0;
         }
-        return 1;
+        return 2;
     }
 
     /**
