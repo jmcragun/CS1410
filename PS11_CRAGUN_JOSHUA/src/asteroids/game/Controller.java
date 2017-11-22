@@ -6,6 +6,7 @@ import java.util.Iterator;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
+import asteroids.participants.Mine;
 
 /**
  * Controls a game of Asteroids.
@@ -72,7 +73,7 @@ public class Controller implements KeyListener, ActionListener
     {
         // Clear the screen, reset the level, and display the legend
         clear();
-        display.setLegend("Asteroids");
+        display.setLegend("ASTEROIDS");
 
         // Place four asteroids near the corners of the screen.
         placeAsteroids();
@@ -130,6 +131,9 @@ public class Controller implements KeyListener, ActionListener
 
         // Place the ship
         placeShip();
+        
+        // Add mine
+        addParticipant(new Mine());
 
         // Reset statistics
         lives = 1;

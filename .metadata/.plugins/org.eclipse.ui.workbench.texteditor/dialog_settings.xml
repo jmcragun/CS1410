@@ -14,12 +14,13 @@
 	</section>
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="colorMap" key="selection"/>
+		<item value="customMode" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="newGame"/>
 			<item value="summaryMap"/>
 			<item value="occurences"/>
 			<item value="50"/>
@@ -29,6 +30,7 @@
 			<item value="40"/>
 		</list>
 		<list key="replacehistory">
+			<item value="customMode"/>
 			<item value="colorMap"/>
 			<item value="occurrences"/>
 			<item value="100"/>

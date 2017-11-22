@@ -107,6 +107,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
+        
         if (p instanceof ShipDestroyer)
         {
             // Expire the ship from the game

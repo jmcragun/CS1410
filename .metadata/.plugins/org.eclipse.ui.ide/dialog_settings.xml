@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<list key="org.eclipse.ui.internal.wizards.datatransfer.SmartImportRootWizardPage.knownSources">
+		<item value="C:\Users\Joshua Cragun\eclipse-workspace\PS11_CRAGUN_JOSHUA"/>
+		<item value="C:\Users\Joshua Cragun\eclipse-workspace\PS8_CRAGUN_JOSHUA"/>
+		<item value="C:\Users\Joshua Cragun\eclipse-workspace\PS10_CRAGUN_JOSHUA"/>
 		<item value="C:\Users\Joshua Cragun\eclipse-workspace\L2_CRAGUN_JOSHUA"/>
 		<item value="C:\Users\Joshua Cragun\eclipse-workspace\MethodLab"/>
 	</list>
