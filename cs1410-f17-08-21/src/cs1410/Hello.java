@@ -25,6 +25,7 @@ public class Hello
         double tempF = Double.parseDouble(input);
         double tempC = (tempF - 32) * 5.0 / 9.0;
         System.out.println("Degrees C: " + tempC);
+        keyboard.close();
     }
     /**
      * Reverses string
