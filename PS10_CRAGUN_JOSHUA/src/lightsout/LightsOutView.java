@@ -60,7 +60,6 @@ public class LightsOutView extends JFrame implements ActionListener
         score.setLayout(new BorderLayout());
         root.add(score, "North");
         JPanel p = new JPanel();
-        p.setBackground(BACKGROUND_COLOR);
         wins = new JLabel("Wins: 0");
         wins.setFont(new Font("SansSerif", Font.BOLD, FONT_SIZE));
         wins.setForeground(Color.BLACK);

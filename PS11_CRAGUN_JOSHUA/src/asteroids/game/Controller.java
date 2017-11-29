@@ -3,10 +3,10 @@ package asteroids.game;
 import static asteroids.game.Constants.*;
 import java.awt.event.*;
 import java.util.Iterator;
+import java.util.Random;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
-import asteroids.participants.Mine;
 
 /**
  * Controls a game of Asteroids.
@@ -31,6 +31,9 @@ public class Controller implements KeyListener, ActionListener
 
     /** Number of lives left */
     private int lives;
+
+    /** Current level of the game */
+    private int level;
 
     /** The game display */
     private Display display;
@@ -76,7 +79,7 @@ public class Controller implements KeyListener, ActionListener
         display.setLegend("ASTEROIDS");
 
         // Place four asteroids near the corners of the screen.
-        placeAsteroids();
+        placeAsteroids(this.level + 1);
     }
 
     /**
@@ -103,9 +106,22 @@ public class Controller implements KeyListener, ActionListener
     /**
      * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
      */
-    private void placeAsteroids ()
+    private void placeAsteroids (int level)
     {
-        addParticipant(new Asteroid(0, 2, EDGE_OFFSET, EDGE_OFFSET, 3, this));
+        Random rand = new Random();
+        // Create the appropriate amount of asteroids of random variety and position
+        for (int i = 0; i < level + 3; i++)
+        {
+            int x = rand.nextInt(450);
+            int y = rand.nextInt(450);
+            int v = rand.nextInt(4);
+            while (Math.abs((EDGE_OFFSET + x) - (SIZE / 2)) < 175 && Math.abs((EDGE_OFFSET + y) - (SIZE / 2)) < 175)
+            {
+                x = rand.nextInt(450);
+                y = rand.nextInt(450);
+            }
+            addParticipant(new Asteroid(v, 2, EDGE_OFFSET + x, EDGE_OFFSET + y, 3, this));
+        }
     }
 
     /**
@@ -126,17 +142,15 @@ public class Controller implements KeyListener, ActionListener
         // Clear the screen
         clear();
 
-        // Plac asteroids
-        placeAsteroids();
-
         // Place the ship
         placeShip();
-        
-        // Add mine
-        addParticipant(new Mine());
 
         // Reset statistics
-        lives = 1;
+        lives = 3;
+        level = 1;
+
+        // Place asteroids
+        placeAsteroids(this.level);
 
         // Start listening to events (but don't listen twice)
         display.removeKeyListener(this);
@@ -243,6 +257,10 @@ public class Controller implements KeyListener, ActionListener
             if (lives <= 0)
             {
                 finalScreen();
+            }
+            else
+            {
+                placeShip();
             }
         }
     }
