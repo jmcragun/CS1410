@@ -195,7 +195,7 @@ public class Controller implements KeyListener, ActionListener
         if (pstate.countAsteroids() == 0)
         {
             scheduleTransition(END_DELAY);
-        }
+        } 
     }
 
     /**

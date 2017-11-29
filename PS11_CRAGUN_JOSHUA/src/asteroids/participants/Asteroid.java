@@ -149,6 +149,21 @@ public class Asteroid extends Participant implements ShipDestroyer
 
             // Inform the controller
             controller.asteroidDestroyed();
+
+            if (this.size == 2)
+            {
+                controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 1, this.getX(), this.getY(),
+                        RANDOM.nextInt(MAXIMUM_MEDIUM_ASTEROID_SPEED), this.controller));
+                controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 1, this.getX(), this.getY(),
+                        RANDOM.nextInt(MAXIMUM_MEDIUM_ASTEROID_SPEED) + 1, this.controller));
+            }
+            else if (this.size == 1)
+            {
+                controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 0, this.getX(), this.getY(),
+                        RANDOM.nextInt(MAXIMUM_SMALL_ASTEROID_SPEED) + 1, this.controller));
+                controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 0, this.getX(), this.getY(),
+                        RANDOM.nextInt(MAXIMUM_SMALL_ASTEROID_SPEED) + 1, this.controller));
+            }
         }
     }
 }
