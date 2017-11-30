@@ -153,9 +153,13 @@ public class Asteroid extends Participant implements ShipDestroyer
             if (this.size == 2)
             {
                 controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 1, this.getX(), this.getY(),
-                        RANDOM.nextInt(MAXIMUM_MEDIUM_ASTEROID_SPEED), this.controller));
+                        RANDOM.nextInt(MAXIMUM_MEDIUM_ASTEROID_SPEED) + 1, this.controller));
                 controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 1, this.getX(), this.getY(),
                         RANDOM.nextInt(MAXIMUM_MEDIUM_ASTEROID_SPEED) + 1, this.controller));
+                for (int i = 0; i < (RANDOM.nextInt(3) + 3); i++)
+                {
+                    controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
+                }
             }
             else if (this.size == 1)
             {
@@ -163,6 +167,17 @@ public class Asteroid extends Participant implements ShipDestroyer
                         RANDOM.nextInt(MAXIMUM_SMALL_ASTEROID_SPEED) + 1, this.controller));
                 controller.addParticipant(new Asteroid(RANDOM.nextInt(4), 0, this.getX(), this.getY(),
                         RANDOM.nextInt(MAXIMUM_SMALL_ASTEROID_SPEED) + 1, this.controller));
+                for (int i = 0; i < (RANDOM.nextInt(3) + 3); i++)
+                {
+                    controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < (RANDOM.nextInt(3) + 3); i++)
+                {
+                    controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
+                }
             }
         }
     }

@@ -23,7 +23,7 @@ public class Screen extends JPanel
     public Screen (Controller controller)
     {
         this.controller = controller;
-        legend = "";
+        legend = "Test";
         setPreferredSize(new Dimension(SIZE, SIZE));
         setMinimumSize(new Dimension(SIZE, SIZE));
         setBackground(Color.black);

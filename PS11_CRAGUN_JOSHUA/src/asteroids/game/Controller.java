@@ -120,7 +120,7 @@ public class Controller implements KeyListener, ActionListener
                 x = rand.nextInt(450);
                 y = rand.nextInt(450);
             }
-            addParticipant(new Asteroid(v, 2, EDGE_OFFSET + x, EDGE_OFFSET + y, 3, this));
+            addParticipant(new Asteroid(v, 2, EDGE_OFFSET + x, EDGE_OFFSET + y, RANDOM.nextInt(MAXIMUM_LARGE_ASTEROID_SPEED) + 1, this));
         }
     }
 
