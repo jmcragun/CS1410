@@ -36,9 +36,6 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         outline = poly;
-
-        // Schedule an acceleration in two seconds
-        new ParticipantCountdownTimer(this, "move", 2000);
     }
 
     /**
@@ -59,6 +56,47 @@ public class Ship extends Participant implements AsteroidDestroyer
         Point2D.Double point = new Point2D.Double(20, 0);
         transformPoint(point);
         return point.getY();
+    }
+
+    /**
+     * Changes the ship outline to one with the backburner flaming
+     */
+    public void switchOutlineFire ()
+    {
+        if (this != null)
+        {
+            Path2D.Double poly = new Path2D.Double();
+            poly.moveTo(21, 0);
+            poly.lineTo(-21, 12);
+            poly.lineTo(-14, 10);
+            poly.lineTo(-14, -10);
+            poly.lineTo(-20, 0);
+            poly.lineTo(-14, 10);
+            poly.lineTo(-14, -10);
+            poly.lineTo(-21, -12);
+
+            poly.closePath();
+
+            this.outline = poly;
+        }
+    }
+
+    /**
+     * Changes the ship outline back to the original ship shape
+     */
+    public void switchOutlineNormal ()
+    {
+        if (this != null)
+        {
+            Path2D.Double poly = new Path2D.Double();
+            poly.moveTo(21, 0);
+            poly.lineTo(-21, 12);
+            poly.lineTo(-14, 10);
+            poly.lineTo(-14, -10);
+            poly.lineTo(-21, -12);
+            poly.closePath();
+            this.outline = poly;
+        }
     }
 
     @Override
@@ -107,7 +145,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        
+
         if (p instanceof ShipDestroyer)
         {
             // Expire the ship from the game

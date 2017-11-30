@@ -38,6 +38,10 @@ public class Controller implements KeyListener, ActionListener
     /** The game display */
     private Display display;
 
+    private boolean up;
+    private boolean left;
+    private boolean right;
+
     /**
      * Constructs a controller to coordinate the game and screen
      */
@@ -48,6 +52,10 @@ public class Controller implements KeyListener, ActionListener
 
         // Set up the refresh timer.
         refreshTimer = new Timer(FRAME_INTERVAL, this);
+
+        up = false;
+        left = false;
+        right = false;
 
         // Clear the transitionTime
         transitionTime = Long.MAX_VALUE;
@@ -120,7 +128,8 @@ public class Controller implements KeyListener, ActionListener
                 x = rand.nextInt(450);
                 y = rand.nextInt(450);
             }
-            addParticipant(new Asteroid(v, 2, EDGE_OFFSET + x, EDGE_OFFSET + y, RANDOM.nextInt(MAXIMUM_LARGE_ASTEROID_SPEED) + 1, this));
+            addParticipant(new Asteroid(v, 2, EDGE_OFFSET + x, EDGE_OFFSET + y,
+                    RANDOM.nextInt(MAXIMUM_LARGE_ASTEROID_SPEED) + 1, this));
         }
     }
 
@@ -195,7 +204,7 @@ public class Controller implements KeyListener, ActionListener
         if (pstate.countAsteroids() == 0)
         {
             scheduleTransition(END_DELAY);
-        } 
+        }
     }
 
     /**
@@ -230,6 +239,19 @@ public class Controller implements KeyListener, ActionListener
 
             // Refresh screen
             display.refresh();
+
+            if (up && ship != null)
+            {
+                ship.accelerate();
+            }
+            if (right && ship != null)
+            {
+                ship.turnRight();
+            }
+            if (left && ship != null)
+            {
+                ship.turnLeft();
+            }
         }
     }
 
@@ -271,9 +293,18 @@ public class Controller implements KeyListener, ActionListener
     @Override
     public void keyPressed (KeyEvent e)
     {
-        if (e.getKeyCode() == KeyEvent.VK_RIGHT && ship != null)
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd')
         {
-            ship.turnRight();
+            right = true;
+        }
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w')
+        {
+            up = true;
+            ship.switchOutlineFire();
+        }
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a')
+        {
+            left = true;
         }
     }
 
@@ -291,5 +322,18 @@ public class Controller implements KeyListener, ActionListener
     @Override
     public void keyReleased (KeyEvent e)
     {
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd')
+        {
+            right = false;
+        }
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w')
+        {
+            up = false;
+            ship.switchOutlineNormal();
+        }
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a')
+        {
+            left = false;
+        }
     }
 }
