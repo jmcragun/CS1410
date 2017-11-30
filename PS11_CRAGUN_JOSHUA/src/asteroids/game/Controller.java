@@ -157,6 +157,9 @@ public class Controller implements KeyListener, ActionListener
         // Reset statistics
         lives = 3;
         level = 1;
+        
+        // Sets glass pane visible
+        display.glassSwitch();
 
         // Place asteroids
         placeAsteroids(this.level);
