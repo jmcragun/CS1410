@@ -54,10 +54,6 @@ public class Controller implements KeyListener, ActionListener
         // Set up the refresh timer.
         refreshTimer = new Timer(FRAME_INTERVAL, this);
 
-        up = false;
-        left = false;
-        right = false;
-
         // Clear the transitionTime
         transitionTime = Long.MAX_VALUE;
 
@@ -68,6 +64,10 @@ public class Controller implements KeyListener, ActionListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
+        // Stop movement briefly
+        up = false;
+        left = false;
+        right = false;
     }
 
     /**
@@ -152,8 +152,14 @@ public class Controller implements KeyListener, ActionListener
         // Clear the screen
         clear();
 
+        // Clear the transition time
+        transitionTime = Long.MAX_VALUE;
+
         // Place the ship
         placeShip();
+        up = false;
+        left = false;
+        right = false;
 
         // Reset statistics
         lives = 3;
@@ -188,6 +194,9 @@ public class Controller implements KeyListener, ActionListener
     {
         // Null out the ship
         ship = null;
+        up = false;
+        left = false;
+        right = false;
 
         // Display a legend
         display.setLegend("Ouch!");
