@@ -198,7 +198,7 @@ public class Controller implements KeyListener, ActionListener
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
     }
-    
+
     /**
      * Causes the ship to shoot a bullet
      */
@@ -305,20 +305,22 @@ public class Controller implements KeyListener, ActionListener
     @Override
     public void keyPressed (KeyEvent e)
     {
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd'))
         {
             right = true;
         }
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w'))
         {
             up = true;
             ship.switchOutlineFire();
         }
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a'))
         {
             left = true;
         }
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+        if (ship != null
+                && (e.getKeyCode() == KeyEvent.VK_SPACE || e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyChar() == 's'))
+        {
             shoot();
         }
     }
@@ -337,16 +339,16 @@ public class Controller implements KeyListener, ActionListener
     @Override
     public void keyReleased (KeyEvent e)
     {
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyChar() == 'd'))
         {
             right = false;
         }
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_UP || e.getKeyChar() == 'w'))
         {
             up = false;
             ship.switchOutlineNormal();
         }
-        if (ship != null && e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a')
+        if (ship != null && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a'))
         {
             left = false;
         }
