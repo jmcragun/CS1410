@@ -19,6 +19,9 @@ public class Ship extends Participant implements AsteroidDestroyer
     /** Game controller */
     private Controller controller;
 
+    /** direction the ship is pointing */
+    private double theta;
+
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
@@ -27,6 +30,7 @@ public class Ship extends Participant implements AsteroidDestroyer
         this.controller = controller;
         setPosition(x, y);
         setRotation(direction);
+        this.theta = Math.PI / -2;
 
         Path2D.Double poly = new Path2D.Double();
         poly.moveTo(21, 0);
@@ -121,6 +125,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void turnRight ()
     {
         rotate(Math.PI / 16);
+        this.theta += Math.PI / 16;
     }
 
     /**
@@ -129,6 +134,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void turnLeft ()
     {
         rotate(-Math.PI / 16);
+        this.theta -= Math.PI / 16;
     }
 
     /**
@@ -137,6 +143,15 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void accelerate ()
     {
         accelerate(SHIP_ACCELERATION);
+    }
+
+    /**
+     * returns the direction the ship nose it pointed
+     * @return
+     */
+    public double whatIsTheta ()
+    {
+        return theta;
     }
 
     /**

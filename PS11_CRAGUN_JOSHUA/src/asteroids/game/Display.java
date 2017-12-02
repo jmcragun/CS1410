@@ -125,13 +125,20 @@ public class Display extends JFrame
         // Connect the controller to the start button
         startGame.addActionListener(controller);
     }
-
+    /**
+     * Draws the lives at a certain location
+     * @param g
+     * @param x
+     * @param y
+     */
     public void drawLives (Graphics g, int x, int y)
     {
         g.setColor(Color.WHITE);
         g.fillRect(x, y, 4, 10);
     }
-
+    /**
+     * Switches the glass pane to visible
+     */
     public void glassSwitch ()
     {
         glassB = true;

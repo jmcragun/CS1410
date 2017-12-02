@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
+import asteroids.participants.Bullet;
 
 /**
  * Controls a game of Asteroids.
@@ -157,7 +158,7 @@ public class Controller implements KeyListener, ActionListener
         // Reset statistics
         lives = 3;
         level = 1;
-        
+
         // Sets glass pane visible
         display.glassSwitch();
 
@@ -196,6 +197,14 @@ public class Controller implements KeyListener, ActionListener
 
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
+    }
+    
+    /**
+     * Causes the ship to shoot a bullet
+     */
+    private void shoot ()
+    {
+        addParticipant(new Bullet(this.ship.getXNose() - 1.9, this.ship.getYNose(), this));
     }
 
     /**
@@ -308,6 +317,9 @@ public class Controller implements KeyListener, ActionListener
         if (ship != null && e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a')
         {
             left = true;
+        }
+        if (ship != null && e.getKeyCode() == KeyEvent.VK_SPACE) {
+            shoot();
         }
     }
 

@@ -31,7 +31,7 @@ public class Dust extends Participant
         setRotation(2 * Math.PI * RANDOM.nextDouble());
         createDustOutline();
         
-        // Scedule expiration
+        // Schedule expiration
         new ParticipantCountdownTimer(this, "expire", 1450);
     }
 
