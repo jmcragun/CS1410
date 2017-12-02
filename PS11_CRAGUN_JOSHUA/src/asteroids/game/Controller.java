@@ -255,7 +255,6 @@ public class Controller implements KeyListener, ActionListener
         // If all the asteroids are gone, schedule a transition
         if (pstate.countAsteroids() == 0)
         {
-            level++;
             scheduleTransition(END_DELAY);
         }
     }
@@ -336,6 +335,7 @@ public class Controller implements KeyListener, ActionListener
             // If a level is over, add the new asteroids
             else if (pstate.countAsteroids() == 0)
             {
+                level++;
                 placeAsteroids(level);
                 placeShip();
             }
