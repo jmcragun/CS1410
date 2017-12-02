@@ -29,6 +29,8 @@ public class Display extends JFrame
 
     private boolean glassB;
 
+    private Controller controller;
+
     /**
      * Lays out the game and creates the controller
      */
@@ -40,6 +42,7 @@ public class Display extends JFrame
         // Default behavior on closing
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        this.controller = controller;
         // The main playing area and the controller
         screen = new Screen(controller);
 
@@ -125,8 +128,10 @@ public class Display extends JFrame
         // Connect the controller to the start button
         startGame.addActionListener(controller);
     }
+
     /**
      * Draws the lives at a certain location
+     * 
      * @param g
      * @param x
      * @param y
@@ -136,6 +141,7 @@ public class Display extends JFrame
         g.setColor(Color.WHITE);
         g.fillRect(x, y, 4, 10);
     }
+
     /**
      * Switches the glass pane to visible
      */
@@ -150,6 +156,8 @@ public class Display extends JFrame
      */
     public void refresh ()
     {
+        updateScore();
+        updateLevel();
         screen.repaint();
     }
 
@@ -159,5 +167,14 @@ public class Display extends JFrame
     public void setLegend (String s)
     {
         screen.setLegend(s);
+    }
+
+    public void updateScore ()
+    {
+        score.setText("" + controller.getScore());
+    }
+    
+    public void updateLevel() {
+        level.setText("" + controller.getLevel());
     }
 }

@@ -36,6 +36,9 @@ public class Controller implements KeyListener, ActionListener
     /** Current level of the game */
     private int level;
 
+    /** The Player's score */
+    private int score;
+
     /** The game display */
     private Display display;
 
@@ -213,7 +216,35 @@ public class Controller implements KeyListener, ActionListener
      */
     private void shoot ()
     {
-        addParticipant(new Bullet(this.ship.getXNose() - 1.9, this.ship.getYNose(), this));
+        if (pstate.countBullets() < 8)
+        {
+            addParticipant(new Bullet(this.ship.getXNose() - 1.9, this.ship.getYNose(), this));
+        }
+    }
+
+    /**
+     * Allows the score to be changed
+     * 
+     * @param score
+     */
+    public void setScore (int score)
+    {
+        this.score = score;
+    }
+
+    /**
+     * Returns the current score
+     * 
+     * @return
+     */
+    public int getScore ()
+    {
+        return this.score;
+    }
+
+    public int getLevel ()
+    {
+        return this.level;
     }
 
     /**
@@ -224,6 +255,7 @@ public class Controller implements KeyListener, ActionListener
         // If all the asteroids are gone, schedule a transition
         if (pstate.countAsteroids() == 0)
         {
+            level++;
             scheduleTransition(END_DELAY);
         }
     }
@@ -300,6 +332,12 @@ public class Controller implements KeyListener, ActionListener
             if (lives <= 0)
             {
                 finalScreen();
+            }
+            // If a level is over, add the new asteroids
+            else if (pstate.countAsteroids() == 0)
+            {
+                placeAsteroids(level);
+                placeShip();
             }
             else
             {

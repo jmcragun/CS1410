@@ -149,6 +149,8 @@ public class Asteroid extends Participant implements ShipDestroyer
 
             // Inform the controller
             controller.asteroidDestroyed();
+            
+            int curScore = controller.getScore();
 
             if (this.size == 2)
             {
@@ -160,6 +162,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                 {
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
+                controller.setScore(curScore + 20);
             }
             else if (this.size == 1)
             {
@@ -171,6 +174,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                 {
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
+                controller.setScore(curScore + 50);
             }
             else
             {
@@ -178,6 +182,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                 {
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
+                controller.setScore(curScore + 100);
             }
         }
     }
