@@ -1,9 +1,7 @@
 package asteroids.participants;
 
-import static asteroids.game.Constants.*;
 import java.awt.Shape;
 import java.awt.geom.*;
-import asteroids.game.Controller;
 import asteroids.game.Participant;
 
 public class Life extends Participant
@@ -11,15 +9,10 @@ public class Life extends Participant
     /** Shape of the life */
     private Shape outline;
     /** The controller's ship */
-    private Ship ship;
-    /** Game controller */
-    private Controller controller;
-    /** The life this Life represents */
     private int life;
 
-    public Life (int x, int y, int life, Controller controller)
+    public Life (int x, int y, int life)
     {
-        this.controller = controller;
         this.life = life;
         setPosition(x, y);
 

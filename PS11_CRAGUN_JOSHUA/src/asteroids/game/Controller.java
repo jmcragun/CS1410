@@ -123,7 +123,7 @@ public class Controller implements KeyListener, ActionListener
         int increment = 0;
         for (int i = 0; i < lives; i++)
         {
-            addParticipant(new Life((SIZE / 12) + increment, SIZE / 8, i, this));
+            addParticipant(new Life((SIZE / 12) + increment, SIZE / 8, i));
             increment += 30;
         }
     }
@@ -225,7 +225,10 @@ public class Controller implements KeyListener, ActionListener
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
     }
-
+    
+    /**
+     * Makes the display match the number of lives in the back end
+     */
     private void updateLives ()
     {
         for (Life life : livesArray)
