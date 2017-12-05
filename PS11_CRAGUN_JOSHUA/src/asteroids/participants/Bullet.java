@@ -15,18 +15,18 @@ public class Bullet extends Participant implements AsteroidDestroyer
 
     /** Game controller */
     private Controller controller;
-    
+
     public Bullet (double x, double y, Controller controller)
     {
         this.controller = controller;
-        Ellipse2D.Double bullet = new Ellipse2D.Double(x, y, 5.0, 5.0);
-        
+        Ellipse2D.Double bullet = new Ellipse2D.Double(x, y, 2.5, 2.5);
+
         setRotation(0);
         setVelocity(BULLET_SPEED, this.controller.getShip().whatIsTheta());
         outline = bullet;
-        
-     // Schedule expiration
-        new ParticipantCountdownTimer(this, "expire", 1000);
+
+        // Schedule expiration
+        new ParticipantCountdownTimer(this, "expire", 1250);
     }
 
     @Override
@@ -44,7 +44,7 @@ public class Bullet extends Participant implements AsteroidDestroyer
             Participant.expire(this);
         }
     }
-    
+
     /**
      * This method is invoked when a ParticipantCountdownTimer completes its countdown.
      */
@@ -56,6 +56,12 @@ public class Bullet extends Participant implements AsteroidDestroyer
         {
             Participant.expire(this);
         }
+    }
+
+    @Override
+    public Life getLife ()
+    {
+        return null;
     }
 
 }

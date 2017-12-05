@@ -138,4 +138,10 @@ public class Dust extends Participant
         }
     }
 
+    @Override
+    public Life getLife ()
+    {
+        return null;
+    }
+
 }

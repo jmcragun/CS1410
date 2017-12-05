@@ -185,4 +185,10 @@ public class Ship extends Participant implements AsteroidDestroyer
             new ParticipantCountdownTimer(this, "move", 200);
         }
     }
+
+    @Override
+    public Life getLife ()
+    {
+        return null;
+    }
 }

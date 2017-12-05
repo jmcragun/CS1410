@@ -3,6 +3,7 @@ package asteroids.game;
 import static asteroids.game.Constants.*;
 import java.awt.*;
 import java.awt.geom.*;
+import asteroids.participants.Life;
 
 /**
  * Represents a single moving element in an asteroids game. Each Participant object has an outline (used for drawing
@@ -231,6 +232,12 @@ public abstract class Participant
      * Takes the appropriate action for a collision of this Participant with p.
      */
     public abstract void collidedWith (Participant p);
+    
+    /**
+     * Returns the life, if it is one
+     * @param p
+     */
+    public abstract Life getLife ();
 
     /**
      * This method is called when a {@link asteroids.game.ParticipantCountdownTimer} that was constructed for this

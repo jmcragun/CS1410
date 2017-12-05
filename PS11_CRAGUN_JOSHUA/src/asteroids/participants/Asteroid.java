@@ -186,4 +186,10 @@ public class Asteroid extends Participant implements ShipDestroyer
             }
         }
     }
+
+    @Override
+    public Life getLife ()
+    {
+        return null;
+    }
 }

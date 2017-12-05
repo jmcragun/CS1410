@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Set;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Bullet;
+import asteroids.participants.Life;
 
 /**
  * Keeps track of the Participants, their motions, and their collisions.
@@ -79,7 +80,7 @@ public class ParticipantState
         }
         return count;
     }
-    
+
     /**
      * Returns the number of asteroids that are active participants
      */
@@ -101,6 +102,35 @@ public class ParticipantState
             }
         }
         return count;
+    }
+
+    public Life[] getLives (int input)
+    {
+        int i = 0;
+        Life[] lives = new Life[input];
+        for (Participant p : participants)
+        {
+            if (p instanceof Life && !p.isExpired())
+            {
+                if ((p.getLife() != null) && (i < input))
+                {
+                    lives[i] = p.getLife();
+                    i++;
+                }
+            }
+        }
+        for (Participant p : pendingAdds)
+        {
+            if (p instanceof Life && !p.isExpired())
+            {
+                if ((p.getLife() != null) && (i < input))
+                {
+                    lives[i] = p.getLife();
+                    i++;
+                }
+            }
+        }
+        return lives;
     }
 
     /**

@@ -23,4 +23,10 @@ public class Alien extends Participant implements AsteroidDestroyer
         
     }
 
+    @Override
+    public Life getLife ()
+    {
+        return null;
+    }
+
 }

@@ -8,6 +8,7 @@ import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
+import asteroids.participants.Life;
 
 /**
  * Controls a game of Asteroids.
@@ -41,6 +42,8 @@ public class Controller implements KeyListener, ActionListener
 
     /** The game display */
     private Display display;
+
+    private Life[] livesArray;
 
     private boolean up;
     private boolean left;
@@ -115,6 +118,16 @@ public class Controller implements KeyListener, ActionListener
         display.setLegend("");
     }
 
+    private void placeLives (int lives)
+    {
+        int increment = 0;
+        for (int i = 0; i < lives; i++)
+        {
+            addParticipant(new Life((SIZE / 12) + increment, SIZE / 8, i, this));
+            increment += 30;
+        }
+    }
+
     /**
      * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
      */
@@ -167,6 +180,8 @@ public class Controller implements KeyListener, ActionListener
         // Reset statistics
         lives = 3;
         level = 1;
+        placeLives(lives);
+        livesArray = pstate.getLives(lives);
 
         // Sets glass pane visible
         display.glassSwitch();
@@ -209,6 +224,14 @@ public class Controller implements KeyListener, ActionListener
 
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
+    }
+
+    private void updateLives ()
+    {
+        for (Life life : livesArray)
+        {
+            life.loseLife(lives);
+        }
     }
 
     /**
@@ -325,6 +348,9 @@ public class Controller implements KeyListener, ActionListener
         {
             // Clear the transition time
             transitionTime = Long.MAX_VALUE;
+            
+            // Update the number of lives to be displayed
+            this.updateLives();
 
             // If there are no lives left, the game is over. Show the final
             // screen.
