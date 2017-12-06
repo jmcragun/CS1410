@@ -9,6 +9,7 @@ import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
 import asteroids.participants.Life;
+import sounds.SoundDemo;
 
 /**
  * Controls a game of Asteroids.
@@ -48,7 +49,10 @@ public class Controller implements KeyListener, ActionListener
     private boolean up;
     private boolean left;
     private boolean right;
-
+    
+    /** Sound clips */
+    private SoundDemo clip;
+    
     /**
      * Constructs a controller to coordinate the game and screen
      */
@@ -70,10 +74,14 @@ public class Controller implements KeyListener, ActionListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
+        
         // Stop movement briefly
         up = false;
         left = false;
         right = false;
+        
+        //Initialize SoundDemo
+        clip = new SoundDemo();
     }
 
     /**
@@ -224,6 +232,9 @@ public class Controller implements KeyListener, ActionListener
 
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
+        
+        // Stop clip of ship thrusters
+        clip.stopThrustClip();
     }
     
     /**
@@ -245,6 +256,7 @@ public class Controller implements KeyListener, ActionListener
         if (pstate.countBullets() < 8)
         {
             addParticipant(new Bullet(this.ship.getXNose() - 1.9, this.ship.getYNose(), this));
+            clip.playFireClip();
         }
     }
 
@@ -389,6 +401,7 @@ public class Controller implements KeyListener, ActionListener
         {
             up = true;
             ship.switchOutlineFire();
+            clip.playThrustClip();
         }
         if (ship != null && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a'))
         {
@@ -423,6 +436,7 @@ public class Controller implements KeyListener, ActionListener
         {
             up = false;
             ship.switchOutlineNormal();
+            clip.stopThrustClip();
         }
         if (ship != null && (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyChar() == 'a'))
         {

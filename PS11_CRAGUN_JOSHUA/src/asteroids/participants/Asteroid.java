@@ -7,6 +7,7 @@ import asteroids.destroyers.AsteroidDestroyer;
 import asteroids.destroyers.ShipDestroyer;
 import asteroids.game.Controller;
 import asteroids.game.Participant;
+import sounds.SoundDemo;
 
 /**
  * Represents asteroids
@@ -21,6 +22,9 @@ public class Asteroid extends Participant implements ShipDestroyer
 
     /** The game controller */
     private Controller controller;
+    
+    /** Sound clips */
+    private SoundDemo clip;
 
     /**
      * Throws an IllegalArgumentException if size or variety is out of range.
@@ -48,6 +52,9 @@ public class Asteroid extends Participant implements ShipDestroyer
         setVelocity(speed, RANDOM.nextDouble() * 2 * Math.PI);
         setRotation(2 * Math.PI * RANDOM.nextDouble());
         createAsteroidOutline(variety, size);
+        
+        //Initialize SoundDemo
+        clip = new SoundDemo();
     }
 
     @Override
@@ -163,6 +170,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
                 controller.setScore(curScore + 20);
+                clip.playBangLClip();
             }
             else if (this.size == 1)
             {
@@ -175,6 +183,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
                 controller.setScore(curScore + 50);
+                clip.playBangMClip();
             }
             else
             {
@@ -183,6 +192,7 @@ public class Asteroid extends Participant implements ShipDestroyer
                     controller.addParticipant(new Dust(this.getX(), this.getY(), 1, RANDOM.nextInt(4)));
                 }
                 controller.setScore(curScore + 100);
+                clip.playBangSClip();
             }
         }
     }

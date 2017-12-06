@@ -1,64 +1,47 @@
 package sounds;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import javax.sound.sampled.*;
 import javax.swing.*;
 
 /**
- * Demonstrates how to put sound files into a project so that they will be included when the project is exported, and
- * demonstrates how to play sounds.
- * 
- * @author Joe Zachary
+ * Creates and plays sound clips
  */
-@SuppressWarnings("serial")
-public class SoundDemo extends JFrame implements ActionListener
+public class SoundDemo
 {
-    /**
-     * Launches a simple sound demo application
-     */
-    public static void main (String[] args)
-    {
-        SoundDemo demo = new SoundDemo();
-        demo.setVisible(true);
-    }
-
-    /** A Clip that, when played, sounds like a weapon being fired */
+    /** Clips for each sound used in the game */
+    private Clip bangAlienClip;
+    private Clip bangLClip;
+    private Clip bangMClip;
+    private Clip bangSClip;
+    private Clip bangShipClip;
+    private Clip beat1Clip;
+    private Clip beat2Clip;
     private Clip fireClip;
-
-    /** A Clip that, when played repeatedly, sounds like a small saucer flying */
-    private Clip smallSaucerClip;
+    private Clip saucerBClip;
+    private Clip saucerSClip;
+    private Clip thrustClip;
 
     /**
      * Creates the demo.
      */
     public SoundDemo ()
     {
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel buttons = new JPanel();
-        buttons.setLayout(new BoxLayout(buttons, BoxLayout.PAGE_AXIS));
-        JPanel fire = new JPanel();
-        JButton fireButton = new JButton("Fire");
-        fireButton.addActionListener(this);
-        fireButton.setActionCommand("fire");
-        fire.add(fireButton);
-        buttons.add(fire);
-        JPanel saucer = new JPanel();
-        JButton saucerButton = new JButton("Small Saucer");
-        saucerButton.setActionCommand("small saucer");
-        saucerButton.addActionListener(this);
-        saucer.add(saucerButton);
-        buttons.add(saucer);
-        setContentPane(buttons);
-        pack();
-
         // We create the clips in advance so that there will be no delay
         // when we need to play them back. Note that the actual wav
         // files are stored in the "sounds" project.
+        bangAlienClip = createClip("/sounds/bangAlienShip.wav");
+        bangLClip = createClip("/sounds/bangLarge.wav");
+        bangMClip = createClip("/sounds/bangMedium.wav");
+        bangSClip = createClip("/sounds/bangSmall.wav");
+        bangShipClip = createClip("/sounds/bangShip.wav");
+        beat1Clip = createClip("/sounds/beat1.wav");
+        beat2Clip = createClip("/sounds/beat2.wav");
         fireClip = createClip("/sounds/fire.wav");
-        smallSaucerClip = createClip("/sounds/saucerSmall.wav");
+        saucerBClip = createClip("/sounds/saucerBig.wav");
+        saucerSClip = createClip("/sounds/saucerSmall.wav");
+        thrustClip = createClip("/sounds/thrust.wav");
     }
 
     /**
@@ -91,15 +74,104 @@ public class SoundDemo extends JFrame implements ActionListener
             return null;
         }
     }
-
+    
     /**
-     * Plays sounds depending on which button was clicked.
+     * plays clip of alien ship being destroyed
      */
-    @Override
-    public void actionPerformed (ActionEvent e)
+    public void playBangAlienClip ()
     {
-        // We "rewind" the fireClip and play it.
-        if (e.getActionCommand().equals("fire") && fireClip != null)
+        if (bangAlienClip != null)
+        {
+            if (bangAlienClip.isRunning())
+            {
+                bangAlienClip.stop();
+            }
+            bangAlienClip.setFramePosition(0);
+            bangAlienClip.start();
+        }
+    }
+    
+    /**
+     * plays clip of large asteroid being destroyed
+     */
+    public void playBangLClip ()
+    {
+        if (bangLClip != null)
+        {
+            if (bangLClip.isRunning())
+            {
+                bangLClip.stop();
+            }
+            bangLClip.setFramePosition(0);
+            bangLClip.start();
+        }
+    }
+    
+    /**
+     * plays clip of medium asteroid being destroyed
+     */
+    public void playBangMClip ()
+    {
+        if (bangMClip != null)
+        {
+            if (bangMClip.isRunning())
+            {
+                bangMClip.stop();
+            }
+            bangMClip.setFramePosition(0);
+            bangMClip.start();
+        }
+    }
+    
+    /**
+     * plays clip of small asteroid being destroyed
+     */
+    public void playBangSClip ()
+    {
+        if (bangSClip != null)
+        {
+            if (bangSClip.isRunning())
+            {
+                bangSClip.stop();
+            }
+            bangSClip.setFramePosition(0);
+            bangSClip.start(); 
+        }
+    }
+    
+    /**
+     * plays clip of player's ship being destroyed
+     */
+    public void playBangShipClip ()
+    {
+        if (bangShipClip != null)
+        {
+            if (bangShipClip.isRunning())
+            {
+                bangShipClip.stop();
+            }
+            bangShipClip.setFramePosition(0);
+            bangShipClip.start();
+        }
+    }
+    
+    /**
+     * plays beat that gets faster as more asteroids are destroyed
+     */
+    public void playBeatClip ()
+    {
+        if (beat1Clip != null && beat2Clip != null)
+        {
+            
+        }
+    }
+    
+    /**
+     * plays clip of bullet firing
+     */
+    public void playFireClip ()
+    {
+        if (fireClip != null)
         {
             if (fireClip.isRunning())
             {
@@ -108,17 +180,68 @@ public class SoundDemo extends JFrame implements ActionListener
             fireClip.setFramePosition(0);
             fireClip.start();
         }
-
-        // We "rewind" the smallSaucerClip and play it ten times in a row.  To loop
-        // continuously, pass Clip.LOOP_CONTINUOUSLY as the parameter.
-        else if (e.getActionCommand().equals("small saucer") && smallSaucerClip != null)
+    }
+    
+    /**
+     * plays clip of a big saucer
+     */
+    public void playSaucerBClip ()
+    {
+        if (saucerBClip != null)
         {
-            if (smallSaucerClip.isRunning())
-            {
-                smallSaucerClip.stop();
-            }
-            smallSaucerClip.setFramePosition(0);
-            smallSaucerClip.loop(10);            
+            saucerBClip.loop(Clip.LOOP_CONTINUOUSLY);
         }
+    }
+    
+    /**
+     * stops clip of a big saucer
+     */
+    public void stopSaucerBClip ()
+    {
+        if (saucerBClip != null)
+        {
+            saucerBClip.stop();
+        }
+    }
+    
+    /**
+     * plays clip of a small saucer
+     */
+    public void playSaucerSClip ()
+    {
+        if (saucerSClip != null)
+        {
+            saucerSClip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+    
+    /**
+     * Stops clip of a small saucer
+     */
+    public void stopSaucerSClip ()
+    {
+        if (saucerSClip != null)
+        {
+            saucerSClip.stop();
+        }
+    }
+    
+    /**
+     * plays clip of ship thrusters
+     */
+    public void playThrustClip ()
+    {
+        if (thrustClip != null)
+        {
+            thrustClip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
+    }
+    
+    /**
+     * Stops clip of Ships thrusters
+     */
+    public void stopThrustClip ()
+    {
+        thrustClip.stop();
     }
 }

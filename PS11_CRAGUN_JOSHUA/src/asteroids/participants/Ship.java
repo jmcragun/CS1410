@@ -7,6 +7,7 @@ import asteroids.destroyers.*;
 import asteroids.game.Controller;
 import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
+import sounds.SoundDemo;
 
 /**
  * Represents ships
@@ -21,6 +22,9 @@ public class Ship extends Participant implements AsteroidDestroyer
 
     /** direction the ship is pointing */
     private double theta;
+    
+    /** Sound clips */
+    private SoundDemo clip;
 
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
@@ -40,6 +44,9 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         outline = poly;
+        
+      //Initialize SoundDemo
+        clip = new SoundDemo();
     }
 
     /**

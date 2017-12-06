@@ -19,16 +19,14 @@ public class Display extends JFrame
     /** Display game level */
     private JLabel level;
 
-    private Graphics g;
-
-    private int x;
-
-    private int y;
-
+    /** A glass pane that contains the score, level, and lives */
     private JPanel glass;
 
+    /** Determines whether or not the glass pane is  visible*/
     private boolean glassB;
 
+   // private Shape outline;
+    
     private Controller controller;
 
     /**
@@ -94,10 +92,6 @@ public class Display extends JFrame
         // Adds to statsPanel
         statsPanel.add(levelPanel, "East");
 
-        // JPanel that displays player's lives
-        JPanel livesPanel = new JPanel();
-        livesPanel.setOpaque(false);
-
         glassB = false;
         // Glass pane set over screenPanel that contains statsPanel
         glass = (JPanel) this.getGlassPane();
@@ -122,24 +116,8 @@ public class Display extends JFrame
         // livesCon.ipadx = 550;
         livesCon.ipady = 530;
 
-        // Add livesPanel to glass
-        glass.add(livesPanel, livesCon);
-
         // Connect the controller to the start button
         startGame.addActionListener(controller);
-    }
-
-    /**
-     * Draws the lives at a certain location
-     * 
-     * @param g
-     * @param x
-     * @param y
-     */
-    public void drawLives (Graphics g, int x, int y)
-    {
-        g.setColor(Color.WHITE);
-        g.fillRect(x, y, 4, 10);
     }
 
     /**
