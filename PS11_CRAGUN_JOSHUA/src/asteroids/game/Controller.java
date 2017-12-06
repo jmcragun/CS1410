@@ -8,6 +8,8 @@ import javax.swing.*;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
+import asteroids.participants.Debris;
+import asteroids.participants.Dust;
 import asteroids.participants.Life;
 import sounds.SoundDemo;
 
@@ -136,6 +138,18 @@ public class Controller implements KeyListener, ActionListener
         }
     }
 
+    private void makeShipDebris ()
+    {
+        for (int i = 0; i < 7; i++)
+        {
+            addParticipant(new Debris(1, i, this));
+        }
+        for (int i = 0; i < (RANDOM.nextInt(3) + 3); i++)
+        {
+            this.addParticipant(new Dust(ship.getX(), ship.getY(), 2, RANDOM.nextInt(4)));
+        }
+    }
+
     /**
      * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
      */
@@ -218,14 +232,14 @@ public class Controller implements KeyListener, ActionListener
      */
     public void shipDestroyed ()
     {
+        // create the ship debris
+        this.makeShipDebris();
+
         // Null out the ship
         ship = null;
         up = false;
         left = false;
         right = false;
-
-        // Display a legend
-        display.setLegend("Ouch!");
 
         // Decrement lives
         lives--;
@@ -236,7 +250,7 @@ public class Controller implements KeyListener, ActionListener
         // Stop clip of ship thrusters
         clip.stopThrustClip();
     }
-    
+
     /**
      * Makes the display match the number of lives in the back end
      */
@@ -363,7 +377,7 @@ public class Controller implements KeyListener, ActionListener
         {
             // Clear the transition time
             transitionTime = Long.MAX_VALUE;
-            
+
             // Update the number of lives to be displayed
             this.updateLives();
 
