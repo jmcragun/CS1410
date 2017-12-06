@@ -26,7 +26,7 @@ public class Bullet extends Participant implements AsteroidDestroyer
         outline = bullet;
 
         // Schedule expiration
-        new ParticipantCountdownTimer(this, "expire", 1250);
+        new ParticipantCountdownTimer(this, "expire", 1125);
     }
 
     @Override
