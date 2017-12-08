@@ -7,13 +7,13 @@ import java.util.Random;
 import javax.swing.*;
 import asteroids.participants.Alien;
 import asteroids.participants.AlienBullet;
+import asteroids.participants.AlienDebris;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
 import asteroids.participants.Debris;
 import asteroids.participants.Dust;
 import asteroids.participants.Life;
-import asteroids.game.ParticipantCountdownTimer;
 import sounds.SoundDemo;
 
 /**
@@ -167,6 +167,18 @@ public class Controller implements KeyListener, ActionListener
         }
     }
 
+    private void makeAlienDebris (int size, double x, double y)
+    {
+        for (int i = 0; i < 14; i++)
+        {
+            addParticipant(new AlienDebris(x, y, 1, size, i));
+        }
+        for (int i = 0; i < (RANDOM.nextInt(3) + 3); i++)
+        {
+            this.addParticipant(new Dust(x, y, 2, RANDOM.nextInt(4)));
+        }
+    }
+
     /**
      * Places an asteroid near one corner of the screen. Gives it a random velocity and rotation.
      */
@@ -274,7 +286,10 @@ public class Controller implements KeyListener, ActionListener
      */
     public void alienDestroyed ()
     {
+        // get info for upcoming method calls
         int i = alien.getAlienSize();
+        double x = alien.getX();
+        double y = alien.getY();
         alien = null;
         scheduleTransition(RANDOM.nextInt(ALIEN_DELAY) + 5000);
         if (i == 1)
@@ -287,6 +302,7 @@ public class Controller implements KeyListener, ActionListener
         }
         score += ALIENSHIP_SCORE[i];
         alienCanShoot = false;
+        this.makeAlienDebris(i, x, y);
     }
 
     /**
