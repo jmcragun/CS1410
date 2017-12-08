@@ -319,7 +319,7 @@ public class Controller implements KeyListener, ActionListener
     {
         if (alien != null)
         {
-            addParticipant(new AlienBullet(alien.getX(), alien.getY(), RANDOM.nextDouble() * 2 * Math.PI, this));
+            addParticipant(new AlienBullet(alien.getX(), alien.getY(), RANDOM.nextDouble() * 2 * Math.PI));
             clip.playFireClip();
         }
         scheduleTransition(RANDOM.nextInt(2000));
@@ -332,7 +332,7 @@ public class Controller implements KeyListener, ActionListener
     {
         if ((ship != null) && (alien != null))
         {
-            addParticipant(new AlienBullet(alien.getX(), alien.getY(), getPlayerTheta(), this));
+            addParticipant(new AlienBullet(alien.getX(), alien.getY(), getPlayerTheta()));
             clip.playFireClip();
         }
         scheduleTransition(RANDOM.nextInt(2000));
@@ -498,11 +498,11 @@ public class Controller implements KeyListener, ActionListener
                 clip.playSaucerSClip();
                 scheduleTransition(RANDOM.nextInt(2000));
             }
-            else if (alienCanShoot && alien.getAlienSize() == 1)
+            else if (ship != null && (alienCanShoot && alien.getAlienSize() == 1))
             {
                 alienShootDumb();
             }
-            else if (alienCanShoot && alien.getAlienSize() == 0)
+            else if (ship != null && (alienCanShoot && alien.getAlienSize() == 0))
             {
                 alienShootSmart();
             }

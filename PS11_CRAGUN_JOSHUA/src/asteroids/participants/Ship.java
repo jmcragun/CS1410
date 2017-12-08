@@ -22,9 +22,11 @@ public class Ship extends Participant implements AsteroidDestroyer
 
     /** direction the ship is pointing */
     private double theta;
-    
+
     /** Sound clips */
     private SoundDemo clip;
+
+    private ParticipantCountdownTimer[] timers;
 
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
@@ -44,7 +46,8 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         outline = poly;
-        
+        // Initialize timers
+        timers = new ParticipantCountdownTimer[1];
         // Initialize SoundDemo
         clip = new SoundDemo();
     }
@@ -81,7 +84,7 @@ public class Ship extends Participant implements AsteroidDestroyer
             poly.lineTo(-21, 12);
             poly.lineTo(-14, 10);
             poly.lineTo(-14, -10);
-            poly.lineTo(-20, 0);
+            poly.lineTo(-25, 0);
             poly.lineTo(-14, 10);
             poly.lineTo(-14, -10);
             poly.lineTo(-21, -12);
@@ -154,6 +157,7 @@ public class Ship extends Participant implements AsteroidDestroyer
 
     /**
      * returns the direction the ship nose it pointed
+     * 
      * @return
      */
     public double whatIsTheta ()
@@ -177,21 +181,7 @@ public class Ship extends Participant implements AsteroidDestroyer
             controller.shipDestroyed();
             clip.playBangShipClip();
         }
-    }
-
-    /**
-     * This method is invoked when a ParticipantCountdownTimer completes its countdown.
-     */
-    @Override
-    public void countdownComplete (Object payload)
-    {
-        // Give a burst of acceleration, then schedule another
-        // burst for 200 msecs from now.
-        if (payload.equals("move"))
-        {
-            accelerate();
-            new ParticipantCountdownTimer(this, "move", 200);
-        }
+        
     }
 
     @Override

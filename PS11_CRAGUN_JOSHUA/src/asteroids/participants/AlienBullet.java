@@ -15,12 +15,8 @@ public class AlienBullet extends Participant implements AsteroidDestroyer, ShipD
     /** The outline of the bullet */
     private Shape outline;
 
-    /** Game controller */
-    private Controller controller;
-
-    public AlienBullet (double x, double y, double direction, Controller controller)
+    public AlienBullet (double x, double y, double direction)
     {
-        this.controller = controller;
         Ellipse2D.Double bullet = new Ellipse2D.Double(x, y, 5.0, 5.0);
 
         setRotation(0);
@@ -40,7 +36,7 @@ public class AlienBullet extends Participant implements AsteroidDestroyer, ShipD
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof ShipDestroyer || p instanceof AsteroidDestroyer)
+        if (!(p instanceof Alien) && (p instanceof ShipDestroyer || p instanceof AsteroidDestroyer))
         {
             // Expire the ship from the game
             Participant.expire(this);
