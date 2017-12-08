@@ -274,6 +274,8 @@ public class Controller implements KeyListener, ActionListener
         // Decrement lives
         lives--;
 
+        // Clear the transition time
+        transitionTime = Long.MAX_VALUE;
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
 
@@ -485,6 +487,14 @@ public class Controller implements KeyListener, ActionListener
             {
                 finalScreen();
             }
+            else if (ship == null)
+            {
+                placeShip();
+                if (level >= 2)
+                {
+                    scheduleTransition(RANDOM.nextInt(ALIEN_DELAY) + 5000);
+                }
+            }
             // If a level is over, add the new asteroids
             // If the level is 2 or higher, schedule adding an alien
             else if (pstate.countAsteroids() == 0)
@@ -524,10 +534,6 @@ public class Controller implements KeyListener, ActionListener
             else if ((ship != null && alien != null) && (alienCanShoot && alien.getAlienSize() == 0))
             {
                 alienShootSmart();
-            }
-            else
-            {
-                placeShip();
             }
         }
     }
