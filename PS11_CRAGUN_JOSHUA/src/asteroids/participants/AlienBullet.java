@@ -5,7 +5,6 @@ import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import asteroids.destroyers.AsteroidDestroyer;
 import asteroids.destroyers.ShipDestroyer;
-import asteroids.game.Controller;
 import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
 

@@ -3,7 +3,6 @@ package sounds;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import javax.sound.sampled.*;
-import javax.swing.*;
 
 /**
  * Creates and plays sound clips
@@ -156,13 +155,33 @@ public class SoundDemo
     }
     
     /**
-     * plays beat that gets faster as more asteroids are destroyed
+     * plays the first beat that gets faster as more asteroids are destroyed
      */
-    public void playBeatClip ()
+    public void playBeat1Clip ()
     {
-        if (beat1Clip != null && beat2Clip != null)
+        if (beat1Clip != null)
         {
-            
+            if (beat1Clip.isRunning())
+            {
+                beat1Clip.stop();
+            }
+            beat1Clip.setFramePosition(0);
+            beat1Clip.start(); 
+        }
+    }
+    /**
+     * plays the second beat that gets faster as more asteroids are destroyed
+     */
+    public void playBeat2Clip ()
+    {
+        if (beat2Clip != null)
+        {
+            if (beat2Clip.isRunning())
+            {
+                beat2Clip.stop();
+            }
+            beat2Clip.setFramePosition(0);
+            beat2Clip.start(); 
         }
     }
     

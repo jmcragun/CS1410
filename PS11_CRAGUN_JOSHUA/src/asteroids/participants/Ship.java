@@ -6,7 +6,6 @@ import java.awt.geom.*;
 import asteroids.destroyers.*;
 import asteroids.game.Controller;
 import asteroids.game.Participant;
-import asteroids.game.ParticipantCountdownTimer;
 import sounds.SoundDemo;
 
 /**
@@ -26,8 +25,6 @@ public class Ship extends Participant implements AsteroidDestroyer
     /** Sound clips */
     private SoundDemo clip;
 
-    private ParticipantCountdownTimer[] timers;
-
     /**
      * Constructs a ship at the specified coordinates that is pointed in the given direction.
      */
@@ -46,8 +43,6 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.lineTo(-21, -12);
         poly.closePath();
         outline = poly;
-        // Initialize timers
-        timers = new ParticipantCountdownTimer[1];
         // Initialize SoundDemo
         clip = new SoundDemo();
     }

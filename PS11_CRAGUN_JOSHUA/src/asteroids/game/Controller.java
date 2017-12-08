@@ -5,15 +5,7 @@ import java.awt.event.*;
 import java.util.Iterator;
 import java.util.Random;
 import javax.swing.*;
-import asteroids.participants.Alien;
-import asteroids.participants.AlienBullet;
-import asteroids.participants.AlienDebris;
-import asteroids.participants.Asteroid;
-import asteroids.participants.Ship;
-import asteroids.participants.Bullet;
-import asteroids.participants.Debris;
-import asteroids.participants.Dust;
-import asteroids.participants.Life;
+import asteroids.participants.*;
 import sounds.SoundDemo;
 
 /**
@@ -32,6 +24,8 @@ public class Controller implements KeyListener, ActionListener
 
     /** When this timer goes off, it is time to refresh the animation */
     private Timer refreshTimer;
+    /** The background music*/
+    private BackgroundMusic backgroundMusic;
 
     /**
      * The time at which a transition to a new stage of the game should be made. A transition is scheduled a few seconds
@@ -228,6 +222,9 @@ public class Controller implements KeyListener, ActionListener
         up = false;
         left = false;
         right = false;
+        
+        // Allow the background music to start
+        backgroundMusic = new BackgroundMusic();
 
         // Reset statistics
         lives = 3;
@@ -264,6 +261,9 @@ public class Controller implements KeyListener, ActionListener
     {
         // create the ship debris
         this.makeShipDebris();
+        
+        //pause the music
+        backgroundMusic.pause();
 
         // Null out the ship
         ship = null;
@@ -408,6 +408,7 @@ public class Controller implements KeyListener, ActionListener
             Participant.expire(alien);
             alien = null;
             scheduleTransition(END_DELAY);
+            backgroundMusic.stop();
         }
     }
 
@@ -486,6 +487,7 @@ public class Controller implements KeyListener, ActionListener
             if (lives <= 0)
             {
                 finalScreen();
+                backgroundMusic.stop();
             }
             else if (ship == null)
             {
@@ -494,6 +496,7 @@ public class Controller implements KeyListener, ActionListener
                 {
                     scheduleTransition(RANDOM.nextInt(ALIEN_DELAY) + 5000);
                 }
+                backgroundMusic.resume();
             }
             // If a level is over, add the new asteroids
             // If the level is 2 or higher, schedule adding an alien
@@ -502,6 +505,7 @@ public class Controller implements KeyListener, ActionListener
                 level++;
                 placeAsteroids(level);
                 placeShip();
+                backgroundMusic.begin();
                 alienCanShoot = false;
                 if (level >= 2)
                 {
