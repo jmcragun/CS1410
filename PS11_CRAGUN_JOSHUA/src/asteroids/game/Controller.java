@@ -322,7 +322,7 @@ public class Controller implements KeyListener, ActionListener
             addParticipant(new AlienBullet(alien.getX(), alien.getY(), RANDOM.nextDouble() * 2 * Math.PI));
             clip.playFireClip();
         }
-        scheduleTransition(RANDOM.nextInt(2000) + 2000);
+        scheduleTransition(RANDOM.nextInt(2000) + 1000);
     }
 
     /**
@@ -335,7 +335,7 @@ public class Controller implements KeyListener, ActionListener
             addParticipant(new AlienBullet(alien.getX(), alien.getY(), getPlayerTheta()));
             clip.playFireClip();
         }
-        scheduleTransition(RANDOM.nextInt(2000) + 2000);
+        scheduleTransition(RANDOM.nextInt(2000) + 1000);
     }
 
     private double getPlayerTheta ()
@@ -345,10 +345,7 @@ public class Controller implements KeyListener, ActionListener
         {
             double deltax = ship.getX() - alien.getX();
             double deltay = ship.getY() - alien.getY();
-            theta = Math.atan2(deltax, deltay);
-            if (theta < 0) {
-                theta += (Math.PI * 2);
-            }
+            theta = Math.atan2(deltax, -deltay) - (Math.PI / 2);
             return theta;
         }
         else
@@ -479,9 +476,10 @@ public class Controller implements KeyListener, ActionListener
                 level++;
                 placeAsteroids(level);
                 placeShip();
+                alienCanShoot = false;
                 if (level >= 2)
                 {
-                    scheduleTransition(RANDOM.nextInt(ALIEN_DELAY));
+                    scheduleTransition(RANDOM.nextInt(ALIEN_DELAY) + 5000);
                 }
             }
             // If it's level 2, and alienCanShoot is false, add a big alien, let him shoot, and schedule its first shot
@@ -491,7 +489,7 @@ public class Controller implements KeyListener, ActionListener
                 addParticipant(alien);
                 alienCanShoot = true;
                 clip.playSaucerBClip();
-                scheduleTransition(RANDOM.nextInt(2000));
+                scheduleTransition(RANDOM.nextInt(2000) + 1000);
             }
             // If it's level 2, and alienCanShoot is false, add a small alien, let him shoot, and schedule its first
             // shot
@@ -501,13 +499,13 @@ public class Controller implements KeyListener, ActionListener
                 addParticipant(alien);
                 alienCanShoot = true;
                 clip.playSaucerSClip();
-                scheduleTransition(RANDOM.nextInt(2000));
+                scheduleTransition(RANDOM.nextInt(2000) + 1000);
             }
-            else if (ship != null && (alienCanShoot && alien.getAlienSize() == 1))
+            else if ((ship != null && alien != null) && (alienCanShoot && alien.getAlienSize() == 1))
             {
                 alienShootDumb();
             }
-            else if (ship != null && (alienCanShoot && alien.getAlienSize() == 0))
+            else if ((ship != null && alien != null) && (alienCanShoot && alien.getAlienSize() == 0))
             {
                 alienShootSmart();
             }
