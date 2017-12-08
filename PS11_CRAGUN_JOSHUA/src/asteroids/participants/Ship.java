@@ -172,7 +172,7 @@ public class Ship extends Participant implements AsteroidDestroyer
     public void collidedWith (Participant p)
     {
 
-        if (p instanceof ShipDestroyer)
+        /*if (p instanceof ShipDestroyer)
         {
             // Expire the ship from the game
             Participant.expire(this);
@@ -180,7 +180,7 @@ public class Ship extends Participant implements AsteroidDestroyer
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
             clip.playBangShipClip();
-        }
+        }*/
         
     }
 

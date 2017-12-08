@@ -276,7 +276,7 @@ public class Controller implements KeyListener, ActionListener
     {
         int i = alien.getAlienSize();
         alien = null;
-        scheduleTransition(RANDOM.nextInt(ALIEN_DELAY));
+        scheduleTransition(RANDOM.nextInt(ALIEN_DELAY) + 5000);
         if (i == 1)
         {
             clip.stopSaucerBClip();
@@ -322,7 +322,7 @@ public class Controller implements KeyListener, ActionListener
             addParticipant(new AlienBullet(alien.getX(), alien.getY(), RANDOM.nextDouble() * 2 * Math.PI));
             clip.playFireClip();
         }
-        scheduleTransition(RANDOM.nextInt(2000));
+        scheduleTransition(RANDOM.nextInt(2000) + 2000);
     }
 
     /**
@@ -335,7 +335,7 @@ public class Controller implements KeyListener, ActionListener
             addParticipant(new AlienBullet(alien.getX(), alien.getY(), getPlayerTheta()));
             clip.playFireClip();
         }
-        scheduleTransition(RANDOM.nextInt(2000));
+        scheduleTransition(RANDOM.nextInt(2000) + 2000);
     }
 
     private double getPlayerTheta ()
@@ -346,6 +346,9 @@ public class Controller implements KeyListener, ActionListener
             double deltax = ship.getX() - alien.getX();
             double deltay = ship.getY() - alien.getY();
             theta = Math.atan2(deltax, deltay);
+            if (theta < 0) {
+                theta += (Math.PI * 2);
+            }
             return theta;
         }
         else
@@ -387,6 +390,8 @@ public class Controller implements KeyListener, ActionListener
         // If all the asteroids are gone, schedule a transition
         if (pstate.countAsteroids() == 0)
         {
+            Participant.expire(alien);
+            alien = null;
             scheduleTransition(END_DELAY);
         }
     }

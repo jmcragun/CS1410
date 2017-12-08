@@ -166,12 +166,28 @@ public class Alien extends Participant implements AsteroidDestroyer, ShipDestroy
         // Make the dust go away
         if (payload.equals("down"))
         {
-            setVelocity(speed + 2, dir - 0.75 - ((double) RANDOM.nextInt(51) / 100.0));
+            int choice = RANDOM.nextInt(2);
+            if (choice == 0)
+            {
+                setVelocity(speed + 2, Math.PI / 2);
+            }
+            else
+            {
+                setVelocity(speed + 2, dir - 1);
+            }
             new ParticipantCountdownTimer(this, "normUpNext", 1500 + RANDOM.nextInt(501) - RANDOM.nextInt(501));
         }
         else if (payload.equals("up"))
         {
-            setVelocity(speed + 2, dir + 0.75 + ((double) RANDOM.nextInt(51) / 100.0));
+            int choice = RANDOM.nextInt(2);
+            if (choice == 0)
+            {
+                setVelocity(speed + 2, -Math.PI / 2);
+            }
+            else
+            {
+                setVelocity(speed + 2, dir + 1);
+            }
             new ParticipantCountdownTimer(this, "normDownNext", 1500 + RANDOM.nextInt(501) - RANDOM.nextInt(501));
         }
         else if (payload.equals("normDownNext"))
