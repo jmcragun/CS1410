@@ -45,7 +45,7 @@ public class Ship extends Participant implements AsteroidDestroyer
         poly.closePath();
         outline = poly;
         
-      //Initialize SoundDemo
+        // Initialize SoundDemo
         clip = new SoundDemo();
     }
 
@@ -175,6 +175,7 @@ public class Ship extends Participant implements AsteroidDestroyer
 
             // Tell the controller the ship was destroyed
             controller.shipDestroyed();
+            clip.playBangShipClip();
         }
     }
 

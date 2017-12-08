@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.util.Iterator;
 import java.util.Random;
 import javax.swing.*;
+import asteroids.participants.Alien;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
@@ -217,6 +218,8 @@ public class Controller implements KeyListener, ActionListener
 
         // Give focus to the game screen
         display.requestFocusInWindow();
+        
+        addParticipant(new Alien(1, this));
     }
 
     /**
@@ -456,5 +459,11 @@ public class Controller implements KeyListener, ActionListener
         {
             left = false;
         }
+    }
+
+    public void alienDestroyed ()
+    {
+        // TODO Auto-generated method stub
+        
     }
 }
