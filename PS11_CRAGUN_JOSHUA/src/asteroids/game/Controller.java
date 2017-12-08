@@ -6,12 +6,14 @@ import java.util.Iterator;
 import java.util.Random;
 import javax.swing.*;
 import asteroids.participants.Alien;
+import asteroids.participants.AlienBullet;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Ship;
 import asteroids.participants.Bullet;
 import asteroids.participants.Debris;
 import asteroids.participants.Dust;
 import asteroids.participants.Life;
+import asteroids.game.ParticipantCountdownTimer;
 import sounds.SoundDemo;
 
 /**
@@ -24,6 +26,9 @@ public class Controller implements KeyListener, ActionListener
 
     /** The ship (if one is active) or null (otherwise) */
     private Ship ship;
+
+    /** The Alien ship (if one is active) or null (otherwise) */
+    private Alien alien;
 
     /** When this timer goes off, it is time to refresh the animation */
     private Timer refreshTimer;
@@ -47,15 +52,20 @@ public class Controller implements KeyListener, ActionListener
     /** The game display */
     private Display display;
 
+    /** Array of the game's lives */
     private Life[] livesArray;
 
+    /** Indicates if an up arrow equivalent is being made */
     private boolean up;
+    /** Indicates if the ship is turning counter-clockwise */
     private boolean left;
+    /** Indicates if the ship is turning clockwise */
     private boolean right;
-    
+    /** Indicates the if the alien ship can shoot */
+    private boolean alienCanShoot;
     /** Sound clips */
     private SoundDemo clip;
-    
+
     /**
      * Constructs a controller to coordinate the game and screen
      */
@@ -77,13 +87,11 @@ public class Controller implements KeyListener, ActionListener
         splashScreen();
         display.setVisible(true);
         refreshTimer.start();
-        
-        // Stop movement briefly
-        up = false;
-        left = false;
-        right = false;
-        
-        //Initialize SoundDemo
+
+        // Make sure no bullets are made from the get-go
+        alienCanShoot = false;
+
+        // Initialize SoundDemo
         clip = new SoundDemo();
     }
 
@@ -93,6 +101,14 @@ public class Controller implements KeyListener, ActionListener
     public Ship getShip ()
     {
         return ship;
+    }
+
+    /**
+     * Returns the ship, or null if there isn't one
+     */
+    public Alien getAlien ()
+    {
+        return alien;
     }
 
     /**
@@ -181,6 +197,7 @@ public class Controller implements KeyListener, ActionListener
         pstate.clear();
         display.setLegend("");
         ship = null;
+        alien = null;
     }
 
     /**
@@ -218,8 +235,6 @@ public class Controller implements KeyListener, ActionListener
 
         // Give focus to the game screen
         display.requestFocusInWindow();
-        
-        addParticipant(new Alien(1, this));
     }
 
     /**
@@ -249,9 +264,29 @@ public class Controller implements KeyListener, ActionListener
 
         // Since the ship was destroyed, schedule a transition
         scheduleTransition(END_DELAY);
-        
+
         // Stop clip of ship thrusters
         clip.stopThrustClip();
+    }
+
+    /**
+     * The Alien ship has been destroyed
+     */
+    public void alienDestroyed ()
+    {
+        int i = alien.getAlienSize();
+        alien = null;
+        scheduleTransition(RANDOM.nextInt(ALIEN_DELAY));
+        if (i == 1)
+        {
+            clip.stopSaucerBClip();
+        }
+        else
+        {
+            clip.stopSaucerSClip();
+        }
+        score += ALIENSHIP_SCORE[i];
+        alienCanShoot = false;
     }
 
     /**
@@ -274,6 +309,48 @@ public class Controller implements KeyListener, ActionListener
         {
             addParticipant(new Bullet(this.ship.getXNose() - 1.9, this.ship.getYNose(), this));
             clip.playFireClip();
+        }
+    }
+
+    /**
+     * Causes an alien ship (if there is one) to shoot in a random direction
+     */
+    private void alienShootDumb ()
+    {
+        if (alien != null)
+        {
+            addParticipant(new AlienBullet(alien.getX(), alien.getY(), RANDOM.nextDouble() * 2 * Math.PI, this));
+            clip.playFireClip();
+        }
+        scheduleTransition(RANDOM.nextInt(2000));
+    }
+
+    /**
+     * Causes an alien ship (if there is one) to shoot in at the ship
+     */
+    private void alienShootSmart ()
+    {
+        if ((ship != null) && (alien != null))
+        {
+            addParticipant(new AlienBullet(alien.getX(), alien.getY(), getPlayerTheta(), this));
+            clip.playFireClip();
+        }
+        scheduleTransition(RANDOM.nextInt(2000));
+    }
+
+    private double getPlayerTheta ()
+    {
+        double theta = 0.0;
+        if ((ship != null) && (alien != null))
+        {
+            double deltax = ship.getX() - alien.getX();
+            double deltay = ship.getY() - alien.getY();
+            theta = Math.atan2(deltax, deltay);
+            return theta;
+        }
+        else
+        {
+            return -10.0;
         }
     }
 
@@ -391,11 +468,43 @@ public class Controller implements KeyListener, ActionListener
                 finalScreen();
             }
             // If a level is over, add the new asteroids
+            // If the level is 2 or higher, schedule adding an alien
             else if (pstate.countAsteroids() == 0)
             {
                 level++;
                 placeAsteroids(level);
                 placeShip();
+                if (level >= 2)
+                {
+                    scheduleTransition(RANDOM.nextInt(ALIEN_DELAY));
+                }
+            }
+            // If it's level 2, and alienCanShoot is false, add a big alien, let him shoot, and schedule its first shot
+            else if (level == 2 && !alienCanShoot)
+            {
+                alien = new Alien(1, this);
+                addParticipant(alien);
+                alienCanShoot = true;
+                clip.playSaucerBClip();
+                scheduleTransition(RANDOM.nextInt(2000));
+            }
+            // If it's level 2, and alienCanShoot is false, add a small alien, let him shoot, and schedule its first
+            // shot
+            else if (level >= 3 && !alienCanShoot)
+            {
+                alien = new Alien(0, this);
+                addParticipant(alien);
+                alienCanShoot = true;
+                clip.playSaucerSClip();
+                scheduleTransition(RANDOM.nextInt(2000));
+            }
+            else if (alienCanShoot && alien.getAlienSize() == 1)
+            {
+                alienShootDumb();
+            }
+            else if (alienCanShoot && alien.getAlienSize() == 0)
+            {
+                alienShootSmart();
             }
             else
             {
@@ -459,11 +568,5 @@ public class Controller implements KeyListener, ActionListener
         {
             left = false;
         }
-    }
-
-    public void alienDestroyed ()
-    {
-        // TODO Auto-generated method stub
-        
     }
 }

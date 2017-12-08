@@ -1,28 +1,30 @@
 package asteroids.participants;
 
+import static asteroids.game.Constants.BULLET_SPEED;
 import java.awt.Shape;
-import asteroids.game.Participant;
-import static asteroids.game.Constants.*;
-import java.awt.geom.*;
-import asteroids.destroyers.*;
+import java.awt.geom.Ellipse2D;
+import asteroids.destroyers.AsteroidDestroyer;
+import asteroids.destroyers.ShipDestroyer;
 import asteroids.game.Controller;
+import asteroids.game.Participant;
 import asteroids.game.ParticipantCountdownTimer;
 
-public class Bullet extends Participant implements AsteroidDestroyer
+public class AlienBullet extends Participant implements AsteroidDestroyer, ShipDestroyer
 {
+
     /** The outline of the bullet */
     private Shape outline;
 
     /** Game controller */
     private Controller controller;
 
-    public Bullet (double x, double y, Controller controller)
+    public AlienBullet (double x, double y, double direction, Controller controller)
     {
         this.controller = controller;
-        Ellipse2D.Double bullet = new Ellipse2D.Double(x, y, 2.5, 2.5);
+        Ellipse2D.Double bullet = new Ellipse2D.Double(x, y, 5.0, 5.0);
 
         setRotation(0);
-        setVelocity(BULLET_SPEED, this.controller.getShip().whatIsTheta());
+        setVelocity(BULLET_SPEED, direction);
         outline = bullet;
 
         // Schedule expiration
@@ -38,11 +40,18 @@ public class Bullet extends Participant implements AsteroidDestroyer
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof ShipDestroyer)
+        if (p instanceof ShipDestroyer || p instanceof AsteroidDestroyer)
         {
-            // Expire the bullet from the game
+            // Expire the ship from the game
             Participant.expire(this);
         }
+
+    }
+
+    @Override
+    public Life getLife ()
+    {
+        return null;
     }
 
     /**
@@ -56,12 +65,6 @@ public class Bullet extends Participant implements AsteroidDestroyer
         {
             Participant.expire(this);
         }
-    }
-
-    @Override
-    public Life getLife ()
-    {
-        return null;
     }
 
 }

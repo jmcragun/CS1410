@@ -23,26 +23,90 @@ public class Alien extends Participant implements AsteroidDestroyer, ShipDestroy
     /** Sound clips */
     private SoundDemo clip;
 
+    /** alien ship speed */
+    private int speed;
+
+    /** alien ship primary direction of travel. Is either pi or 0 */
+    private double dir;
+
     public Alien (int size, Controller controller)
     {
         this.controller = controller;
         int side = RANDOM.nextInt(2);
+        int corner = RANDOM.nextInt(2);
         this.size = size;
         // Initialize SoundDemo
         clip = new SoundDemo();
-        if (side == 1 && size == 1)
+        if ((side == 1 && corner == 0) && size == 1)
         {
+            speed = 4;
+            dir = Math.PI;
             setPosition(SIZE, 0);
-            setVelocity(4, Math.PI);
+            setVelocity(speed, dir);
             new ParticipantCountdownTimer(this, "down", 500);
         }
-        else if (side == 0 && size == 1)
+        else if ((side == 1 && corner == 1) && size == 1)
         {
+            speed = 4;
+            dir = Math.PI;
             setPosition(SIZE, SIZE);
-            setVelocity(4, Math.PI);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "up", 500);
+        }
+        else if ((side == 0 && corner == 0) && size == 1)
+        {
+            speed = 4;
+            dir = 0;
+            setPosition(0, 0);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "down", 500);
+        }
+        else if ((side == 0 && corner == 1) && size == 1)
+        {
+            speed = 4;
+            dir = 0;
+            setPosition(0, SIZE);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "up", 500);
+        }
+        else if ((side == 1 && corner == 0) && size == 0)
+        {
+            speed = 6;
+            dir = Math.PI;
+            setPosition(SIZE, 0);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "down", 500);
+        }
+        else if ((side == 1 && corner == 1) && size == 0)
+        {
+            speed = 6;
+            dir = Math.PI;
+            setPosition(SIZE, SIZE);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "up", 500);
+        }
+        else if ((side == 0 && corner == 0) && size == 0)
+        {
+            speed = 6;
+            dir = 0;
+            setPosition(0, 0);
+            setVelocity(speed, dir);
+            new ParticipantCountdownTimer(this, "down", 500);
+        }
+        else if ((side == 0 && corner == 1) && size == 0)
+        {
+            speed = 6;
+            dir = 0;
+            setPosition(0, SIZE);
+            setVelocity(speed, dir);
             new ParticipantCountdownTimer(this, "up", 500);
         }
 
+    }
+
+    public int getAlienSize ()
+    {
+        return this.size;
     }
 
     @Override
@@ -75,7 +139,7 @@ public class Alien extends Participant implements AsteroidDestroyer, ShipDestroy
     @Override
     public void collidedWith (Participant p)
     {
-        if (p instanceof ShipDestroyer || p instanceof AsteroidDestroyer)
+        if (!(p instanceof AlienBullet) && (p instanceof ShipDestroyer || p instanceof AsteroidDestroyer))
         {
             // Expire the ship from the game
             Participant.expire(this);
@@ -102,22 +166,22 @@ public class Alien extends Participant implements AsteroidDestroyer, ShipDestroy
         // Make the dust go away
         if (payload.equals("down"))
         {
-            setVelocity(6, Math.PI - 0.75 - ((double) RANDOM.nextInt(51) / 100.0));
+            setVelocity(speed + 2, dir - 0.75 - ((double) RANDOM.nextInt(51) / 100.0));
             new ParticipantCountdownTimer(this, "normUpNext", 1000 + RANDOM.nextInt(501) - RANDOM.nextInt(501));
         }
         else if (payload.equals("up"))
         {
-            setVelocity(6, Math.PI + 0.75 + ((double) RANDOM.nextInt(51) / 100.0));
+            setVelocity(speed + 2, dir + 0.75 + ((double) RANDOM.nextInt(51) / 100.0));
             new ParticipantCountdownTimer(this, "normDownNext", 1000 + RANDOM.nextInt(501) - RANDOM.nextInt(501));
         }
         else if (payload.equals("normDownNext"))
         {
-            setVelocity(4, Math.PI);
+            setVelocity(speed, dir);
             new ParticipantCountdownTimer(this, "down", 1000 + RANDOM.nextInt(1501) - RANDOM.nextInt(501));
         }
         else if (payload.equals("normUpNext"))
         {
-            setVelocity(4, Math.PI);
+            setVelocity(speed, dir);
             new ParticipantCountdownTimer(this, "up", 1000 + RANDOM.nextInt(1501) - RANDOM.nextInt(501));
         }
     }

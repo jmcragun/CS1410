@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
+import asteroids.participants.Alien;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Bullet;
 import asteroids.participants.Life;
@@ -103,7 +104,12 @@ public class ParticipantState
         }
         return count;
     }
-
+    
+    /**
+     * Creates an array containing all the life objects in the game
+     * @param input
+     * @return
+     */
     public Life[] getLives (int input)
     {
         int i = 0;
