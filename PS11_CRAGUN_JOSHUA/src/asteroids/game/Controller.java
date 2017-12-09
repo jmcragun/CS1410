@@ -24,7 +24,7 @@ public class Controller implements KeyListener, ActionListener
 
     /** When this timer goes off, it is time to refresh the animation */
     private Timer refreshTimer;
-    /** The background music*/
+    /** The background music */
     private BackgroundMusic backgroundMusic;
 
     /**
@@ -222,9 +222,9 @@ public class Controller implements KeyListener, ActionListener
         up = false;
         left = false;
         right = false;
-        
-        // Allow the background music to start
+
         backgroundMusic = new BackgroundMusic();
+        backgroundMusic.begin();
 
         // Reset statistics
         lives = 3;
@@ -261,8 +261,8 @@ public class Controller implements KeyListener, ActionListener
     {
         // create the ship debris
         this.makeShipDebris();
-        
-        //pause the music
+
+        // pause the music
         backgroundMusic.pause();
 
         // Null out the ship
@@ -430,6 +430,11 @@ public class Controller implements KeyListener, ActionListener
         // and bring up the initial screen
         if (e.getSource() instanceof JButton)
         {
+            if (this.backgroundMusic != null)
+            {
+                this.backgroundMusic.stop();
+            }
+            this.backgroundMusic = null;
             initialScreen();
         }
 
