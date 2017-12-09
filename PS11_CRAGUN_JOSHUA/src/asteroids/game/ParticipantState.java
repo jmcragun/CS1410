@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Set;
-import asteroids.participants.Alien;
 import asteroids.participants.Asteroid;
 import asteroids.participants.Bullet;
 import asteroids.participants.Life;
