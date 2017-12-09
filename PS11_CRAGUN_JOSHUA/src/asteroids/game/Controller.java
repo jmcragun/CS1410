@@ -364,6 +364,7 @@ public class Controller implements KeyListener, ActionListener
             double deltax = ship.getX() - alien.getX();
             double deltay = ship.getY() - alien.getY();
             theta = Math.atan2(deltax, -deltay) - (Math.PI / 2);
+            theta = theta - (Math.PI / 36) + (RANDOM.nextDouble() * (Math.PI / 18));
             return theta;
         }
         else
