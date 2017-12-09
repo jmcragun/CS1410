@@ -433,8 +433,8 @@ public class Controller implements KeyListener, ActionListener
             if (this.backgroundMusic != null)
             {
                 this.backgroundMusic.stop();
+                this.backgroundMusic.remove();
             }
-            this.backgroundMusic = null;
             initialScreen();
         }
 

@@ -16,7 +16,7 @@ public class BackgroundMusic extends Participant
 
     private double delta;
 
-    private final double delta2 = 20.0f;
+    private final double delta2 = 5.0f;
 
     public BackgroundMusic ()
     {
@@ -47,6 +47,11 @@ public class BackgroundMusic extends Participant
         musicIsPlaying = false;
         delta = 0;
         new ParticipantCountdownTimer(this, "Begin", 1000);
+    }
+
+    public void remove ()
+    {
+        Participant.expire(this);
     }
 
     @Override
@@ -104,7 +109,7 @@ public class BackgroundMusic extends Participant
             }
             else if (this.musicIsPlaying)
             {
-                clip.playBeat1Clip();
+                clip.playBeat2Clip();
                 new ParticipantCountdownTimer(this, "Beat1", (int) (1000 - delta));
             }
         }
